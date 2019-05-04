@@ -12,9 +12,10 @@
 	<artifactId>accounting</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>accounting</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Accounting micro-service for restaurant</description>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 	</properties>
 
@@ -28,6 +29,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<version>2.1.4.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>2.4.1</version>
 		</dependency>
 
 		<dependency>
