@@ -21,7 +21,7 @@ public class Util {
                 if (day >= 30) {
                     return false;
                 }
-                else return day != 29 || (year % 100 != 0 || year % 400 == 0);
+                else return day != 29 || (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0));
             } else {
                 return true;
             }

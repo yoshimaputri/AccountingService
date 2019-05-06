@@ -73,7 +73,7 @@ public class PengeluaranController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grafik", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Pengeluaran> getPengeluaran(
             @RequestHeader(name = "token", required = false) String token
     ) {
@@ -81,7 +81,7 @@ public class PengeluaranController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grafik/{tahun}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}", method = RequestMethod.GET)
     public List<Pengeluaran> getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
@@ -90,7 +90,7 @@ public class PengeluaranController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grafik/{tahun}/{bulan}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET)
     public List<Pengeluaran> getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun,
@@ -108,7 +108,7 @@ public class PengeluaranController {
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deletePengeluaran(
-            @PathVariable int idpengeluaran
+            @PathVariable("id") int idpengeluaran
     ) {
         throw new NotAllowedException();
     }

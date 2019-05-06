@@ -36,6 +36,9 @@ public class PendapatanController {
         return pendapatanService.newPendapatan(tanggal, jumlah);
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public Pendapatan editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpendapatan,
@@ -57,7 +60,7 @@ public class PendapatanController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grafik", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Pendapatan> getPendapatan(
             @RequestHeader(name = "token", required = false) String token
     ) {
@@ -65,7 +68,7 @@ public class PendapatanController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grafik/{tahun}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}", method = RequestMethod.GET)
     public List<Pendapatan> getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
@@ -74,7 +77,7 @@ public class PendapatanController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grafik/{tahun}/{bulan}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET)
     public List<Pendapatan> getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun,
