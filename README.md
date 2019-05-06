@@ -16,20 +16,21 @@
 ## Doc
 
 ### POST
-
+```
 /pendapatan
 /pengeluaran
-
+```
 ### PUT|PATCH
-
+```
 /pendapatan/{id}
 /pengeluaran/{id}
-
+```
 ### GET
-
+```
 /pendapatan
 /pendapatan/{tahun}
 /pendapatan/{tahun}/{bulan}
 /pengeluaran
 /pengeluaran/{tahun}
 /pengeluaran/{tahun}/{bulan}
+```
