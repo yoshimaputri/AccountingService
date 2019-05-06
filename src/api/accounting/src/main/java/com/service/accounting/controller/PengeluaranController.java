@@ -1,6 +1,7 @@
 package com.service.accounting.controller;
 
 import com.service.accounting.exception.InputFormatException;
+import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pengeluaran;
 import com.service.accounting.service.PengeluaranService;
 import com.service.accounting.utils.Util;
@@ -96,5 +97,19 @@ public class PengeluaranController {
             @PathVariable("bulan") int bulan
     ) {
         return pengeluaranService.getPengeluaran(tahun, bulan);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    public void deletePengeluaran() {
+        throw new NotAllowedException();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deletePengeluaran(
+            @PathVariable int idpengeluaran
+    ) {
+        throw new NotAllowedException();
     }
 }
