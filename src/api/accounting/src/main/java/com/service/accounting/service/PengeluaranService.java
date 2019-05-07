@@ -18,9 +18,11 @@ public interface PengeluaranService {
 
     void changeJumlah(int idpengeluaran, long jumlah);
 
-    List<Pengeluaran> getPengeluaran();
+    List<Pengeluaran> getPengeluaran(Integer start, Integer limit);
 
-    List<Pengeluaran> getPengeluaran(int tahun);
+    Integer getNumberOfPengeluaran();
 
-    List<Pengeluaran> getPengeluaran(int tahun, int bulan);
+    List<Pengeluaran> getPengeluaranByPeriod(int tahun);
+
+    List<Pengeluaran> getPengeluaranByPeriod(int tahun, int bulan);
 }

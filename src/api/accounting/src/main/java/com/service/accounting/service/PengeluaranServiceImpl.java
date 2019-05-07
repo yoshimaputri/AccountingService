@@ -60,18 +60,39 @@ public class PengeluaranServiceImpl implements PengeluaranService {
 
     // Contoh query pakai query(), cocok untuk query yang mungkin mereturn lebih dari satu objek
     @Override
-    public List<Pengeluaran> getPengeluaran() {
-        return jdbcTemplate.query("SELECT * FROM pengeluaran", new PengeluaranMapper());
+    public List<Pengeluaran> getPengeluaran(Integer start, Integer limit) {
+        if (start != null) {
+            if (limit != null) {
+                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
+                        new PengeluaranMapper(), start, limit);
+            } else {
+                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
+                        new PengeluaranMapper(), start, 30);
+            }
+        } else {
+            if (limit != null) {
+                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
+                        new PengeluaranMapper(), 0, limit);
+            } else {
+                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT 300", new PengeluaranMapper());
+            }
+        }
     }
 
     @Override
-    public List<Pengeluaran> getPengeluaran(int tahun) {
+    public Integer getNumberOfPengeluaran() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM pengeluaran",
+                (rs, i) -> rs.getInt(1));
+    }
+
+    @Override
+    public List<Pengeluaran> getPengeluaranByPeriod(int tahun) {
         String sql = "SELECT * FROM pengeluaran WHERE EXTRACT(YEAR FROM peng_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ tahun }, new PengeluaranMapper());
     }
 
     @Override
-    public List<Pengeluaran> getPengeluaran(int tahun, int bulan) {
+    public List<Pengeluaran> getPengeluaranByPeriod(int tahun, int bulan) {
         String sql = "SELECT * FROM pengeluaran WHERE EXTRACT(YEAR FROM peng_tgl)=? AND EXTRACT(MONTH FROM peng_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ tahun, bulan }, new PengeluaranMapper());
     }

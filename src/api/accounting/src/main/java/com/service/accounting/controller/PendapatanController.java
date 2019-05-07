@@ -1,14 +1,14 @@
 package com.service.accounting.controller;
 
-import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pendapatan;
 import com.service.accounting.service.PendapatanService;
-import com.service.accounting.utils.Util;
+import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -29,9 +29,7 @@ public class PendapatanController {
             @RequestParam("tanggal") String tanggal,
             @RequestParam("jumlah") long jumlah
     ) {
-        if (!Util.isValidDate(tanggal)) {
-            throw new InputFormatException("Invalid date format. Expected 'YYYY-MM-DD'.");
-        }
+        InputValidator.checkValidDate(tanggal);
 
         return pendapatanService.newPendapatan(tanggal, jumlah);
     }
@@ -46,11 +44,8 @@ public class PendapatanController {
             @RequestParam(name = "jumlah", required = false) Long jumlah
     ) {
         if (tanggal != null) {
-            if (Util.isValidDate(tanggal)) {
-                pendapatanService.changeTanggal(idpendapatan, tanggal);
-            } else {
-                throw new InputFormatException("Invalid date format. Expected 'YYYY-MM-DD'.");
-            }
+            InputValidator.checkValidDate(tanggal);
+            pendapatanService.changeTanggal(idpendapatan, tanggal);
         }
         if (jumlah != null) {
             pendapatanService.changeJumlah(idpendapatan, jumlah);
@@ -62,9 +57,13 @@ public class PendapatanController {
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Pendapatan> getPendapatan(
-            @RequestHeader(name = "token", required = false) String token
+            @RequestHeader(name = "token", required = false) String token,
+            @RequestParam(name = "start", required = false) Integer start,
+            @RequestParam(name = "limit", required = false) Integer limit,
+            HttpServletResponse response
     ) {
-        return pendapatanService.getPendapatan();
+        response.addHeader("X-Total-Count", pendapatanService.getNumberOfPendapatan().toString());
+        return pendapatanService.getPendapatan(start, limit);
     }
 
     @ResponseBody
@@ -73,7 +72,7 @@ public class PendapatanController {
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
     ) {
-        return pendapatanService.getPendapatan(tahun);
+        return pendapatanService.getPendapatanByPeriod(tahun);
     }
 
     @ResponseBody
@@ -83,7 +82,7 @@ public class PendapatanController {
             @PathVariable("tahun") int tahun,
             @PathVariable("bulan") int bulan
     ) {
-        return pendapatanService.getPendapatan(tahun, bulan);
+        return pendapatanService.getPendapatanByPeriod(tahun, bulan);
     }
 
     @ResponseBody

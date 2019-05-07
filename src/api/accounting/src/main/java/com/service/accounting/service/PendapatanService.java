@@ -13,9 +13,11 @@ public interface PendapatanService {
 
     void changeJumlah(int idpendapatan, long jumlah);
 
-    List<Pendapatan> getPendapatan();
+    List<Pendapatan> getPendapatan(Integer start, Integer limit);
 
-    List<Pendapatan> getPendapatan(int tahun);
+    Integer getNumberOfPendapatan();
 
-    List<Pendapatan> getPendapatan(int tahun, int bulan);
+    List<Pendapatan> getPendapatanByPeriod(int tahun);
+
+    List<Pendapatan> getPendapatanByPeriod(int tahun, int bulan);
 }

@@ -49,18 +49,39 @@ public class PendapatanServiceImpl implements PendapatanService {
     }
 
     @Override
-    public List<Pendapatan> getPendapatan() {
-        return jdbcTemplate.query("SELECT * FROM pendapatan", new PendapatanMapper());
+    public List<Pendapatan> getPendapatan(Integer start, Integer limit) {
+        if (start != null) {
+            if (limit != null) {
+                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
+                        new PendapatanMapper(), start, limit);
+            } else {
+                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
+                        new PendapatanMapper(), start, 30);
+            }
+        } else {
+            if (limit != null) {
+                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
+                        new PendapatanMapper(), 0, limit);
+            } else {
+                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT 300", new PendapatanMapper());
+            }
+        }
     }
 
     @Override
-    public List<Pendapatan> getPendapatan(int tahun) {
+    public Integer getNumberOfPendapatan() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM pendapatan",
+                (rs, i) -> rs.getInt(1));
+    }
+
+    @Override
+    public List<Pendapatan> getPendapatanByPeriod(int tahun) {
         String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ tahun }, new PendapatanMapper());
     }
 
     @Override
-    public List<Pendapatan> getPendapatan(int tahun, int bulan) {
+    public List<Pendapatan> getPendapatanByPeriod(int tahun, int bulan) {
         String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=? AND EXTRACT(MONTH FROM pend_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ tahun, bulan }, new PendapatanMapper());
     }

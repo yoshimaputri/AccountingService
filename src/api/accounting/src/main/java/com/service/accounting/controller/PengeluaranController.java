@@ -1,14 +1,14 @@
 package com.service.accounting.controller;
 
-import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pengeluaran;
 import com.service.accounting.service.PengeluaranService;
-import com.service.accounting.utils.Util;
+import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -38,9 +38,8 @@ public class PengeluaranController {
             @RequestParam("jumlah") long jumlah
     ) {
         // Cek validitas tanggal
-        if (!Util.isValidDate(tanggal)) {
-            throw new InputFormatException("Invalid date format. Expected 'YYYY-MM-DD'.");
-        }
+        InputValidator.checkValidDate(tanggal);
+        InputValidator.checkValidKeterangan(keterangan);
 
         return pengeluaranService.newPengeluaran(tanggal, keterangan, jumlah);
     }
@@ -56,13 +55,11 @@ public class PengeluaranController {
             @RequestParam(name = "jumlah", required = false) Long jumlah
     ) {
         if (tanggal != null) {
-            if (Util.isValidDate(tanggal)) {
-                pengeluaranService.changeTanggal(idpengeluaran, tanggal);
-            } else {
-                throw new InputFormatException("Invalid date format. Expected 'YYYY-MM-DD'.");
-            }
+            InputValidator.checkValidDate(tanggal);
+            pengeluaranService.changeTanggal(idpengeluaran, tanggal);
         }
         if (jumlah != null) {
+            InputValidator.checkValidKeterangan(keterangan);
             pengeluaranService.changeJumlah(idpengeluaran, jumlah);
         }
         if (keterangan != null) {
@@ -75,9 +72,13 @@ public class PengeluaranController {
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Pengeluaran> getPengeluaran(
-            @RequestHeader(name = "token", required = false) String token
+            @RequestHeader(name = "token", required = false) String token,
+            @RequestParam(name = "start", required = false) Integer start,
+            @RequestParam(name = "limit", required = false) Integer limit,
+            HttpServletResponse response
     ) {
-        return pengeluaranService.getPengeluaran();
+        response.addHeader("X-Total-Count", pengeluaranService.getNumberOfPengeluaran().toString());
+        return pengeluaranService.getPengeluaran(start, limit);
     }
 
     @ResponseBody
@@ -86,7 +87,7 @@ public class PengeluaranController {
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
     ) {
-        return pengeluaranService.getPengeluaran(tahun);
+        return pengeluaranService.getPengeluaranByPeriod(tahun);
     }
 
     @ResponseBody
@@ -96,7 +97,7 @@ public class PengeluaranController {
             @PathVariable("tahun") int tahun,
             @PathVariable("bulan") int bulan
     ) {
-        return pengeluaranService.getPengeluaran(tahun, bulan);
+        return pengeluaranService.getPengeluaranByPeriod(tahun, bulan);
     }
 
     @ResponseBody
