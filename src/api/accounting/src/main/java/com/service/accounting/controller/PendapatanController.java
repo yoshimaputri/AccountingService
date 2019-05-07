@@ -36,7 +36,7 @@ public class PendapatanController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
+    @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
     public Pendapatan editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpendapatan,

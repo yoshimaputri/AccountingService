@@ -59,10 +59,10 @@ public class PengeluaranController {
             pengeluaranService.changeTanggal(idpengeluaran, tanggal);
         }
         if (jumlah != null) {
-            InputValidator.checkValidKeterangan(keterangan);
             pengeluaranService.changeJumlah(idpengeluaran, jumlah);
         }
         if (keterangan != null) {
+            InputValidator.checkValidKeterangan(keterangan);
             pengeluaranService.changeKeterangan(idpengeluaran, keterangan);
         }
 

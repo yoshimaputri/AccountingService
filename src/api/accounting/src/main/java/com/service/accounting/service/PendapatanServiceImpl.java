@@ -63,7 +63,7 @@ public class PendapatanServiceImpl implements PendapatanService {
                 return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
                         new PendapatanMapper(), 0, limit);
             } else {
-                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT 300", new PendapatanMapper());
+                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT 300", new PendapatanMapper());
             }
         }
     }
