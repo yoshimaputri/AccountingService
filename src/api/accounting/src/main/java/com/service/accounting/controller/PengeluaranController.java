@@ -1,5 +1,7 @@
 package com.service.accounting.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pengeluaran;
 import com.service.accounting.service.PengeluaranService;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,15 +36,17 @@ public class PengeluaranController {
             // Lebih simple membaca header pakai @RequestHeader.
             // Parameter required masih false karena spek token masih belum turun.
             @RequestHeader(name = "token", required = false) String token,
-            @RequestParam("tanggal") String tanggal,
-            @RequestParam("keterangan") String keterangan,
-            @RequestParam("jumlah") long jumlah
+            @RequestBody String body
     ) {
         // Cek validitas tanggal
-        InputValidator.checkValidDate(tanggal);
-        InputValidator.checkValidKeterangan(keterangan);
-
-        return pengeluaranService.newPengeluaran(tanggal, keterangan, jumlah);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Pengeluaran pengeluaran = mapper.readValue(body, Pengeluaran.class);
+            InputValidator.validateInputData(pengeluaran, true);
+            return pengeluaranService.newPengeluaran(pengeluaran);
+        } catch (IOException e) {
+            throw new InputFormatException();
+        }
     }
 
     @ResponseBody
@@ -50,23 +55,17 @@ public class PengeluaranController {
     public Pengeluaran changePengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpengeluaran,
-            @RequestParam(name = "tanggal", required = false) String tanggal,
-            @RequestParam(name = "keterangan", required = false) String keterangan,
-            @RequestParam(name = "jumlah", required = false) Long jumlah
+            @RequestBody String body
     ) {
-        if (tanggal != null) {
-            InputValidator.checkValidDate(tanggal);
-            pengeluaranService.changeTanggal(idpengeluaran, tanggal);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Pengeluaran pengeluaran = mapper.readValue(body, Pengeluaran.class);
+            pengeluaran.setIdpengeluaran(idpengeluaran);
+            InputValidator.validateInputData(pengeluaran, false);
+            return pengeluaranService.updatePengeluaran(pengeluaran);
+        } catch (IOException e) {
+            throw new InputFormatException();
         }
-        if (jumlah != null) {
-            pengeluaranService.changeJumlah(idpengeluaran, jumlah);
-        }
-        if (keterangan != null) {
-            InputValidator.checkValidKeterangan(keterangan);
-            pengeluaranService.changeKeterangan(idpengeluaran, keterangan);
-        }
-
-        return pengeluaranService.getPengeluaranById(idpengeluaran);
     }
 
     @ResponseBody

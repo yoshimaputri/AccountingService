@@ -25,9 +25,9 @@ public class PengeluaranServiceImpl implements PengeluaranService {
 
     // Contoh query pakai update(), cocok untuk query yang tidak return object
     @Override
-    public Pengeluaran newPengeluaran(String tanggal, String keterangan, long jumlah) {
+    public Pengeluaran newPengeluaran(Pengeluaran partialValue) {
         String sql = "INSERT INTO pengeluaran(peng_tgl, peng_desc, peng_jumlah) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, tanggal, keterangan, jumlah);
+        jdbcTemplate.update(sql, partialValue.getTanggal(), partialValue.getKeterangan(), partialValue.getJumlah());
         return getLatestPengeluaran();
     }
 
@@ -37,25 +37,26 @@ public class PengeluaranServiceImpl implements PengeluaranService {
         return jdbcTemplate.queryForObject(sql, new PengeluaranMapper());
     }
 
-    @Override
-    public Pengeluaran getPengeluaranById(int idpengeluaran) {
+    private Pengeluaran getPengeluaranById(int idpengeluaran) {
         String sql = "SELECT * FROM pengeluaran WHERE peng_id=?";
         return jdbcTemplate.queryForObject(sql, new Object[]{ idpengeluaran }, new PengeluaranMapper());
     }
 
     @Override
-    public void changeTanggal(int idpengeluaran, String tanggal) {
-        jdbcTemplate.update("UPDATE pengeluaran SET peng_tgl=? WHERE peng_id=?", tanggal, idpengeluaran);
-    }
-
-    @Override
-    public void changeKeterangan(int idpengeluaran, String keterangan) {
-        jdbcTemplate.update("UPDATE pengeluaran SET peng_desc=? WHERE peng_id=?", keterangan, idpengeluaran);
-    }
-
-    @Override
-    public void changeJumlah(int idpengeluaran, long jumlah) {
-        jdbcTemplate.update("UPDATE pengeluaran SET peng_jumlah=? WHERE peng_id=?", jumlah, idpengeluaran);
+    public Pengeluaran updatePengeluaran(Pengeluaran partialValue) {
+        if (partialValue.getTanggal() != null) {
+            jdbcTemplate.update("UPDATE pengeluaran SET peng_tgl=? WHERE peng_id=?", 
+                    partialValue.getTanggal(), partialValue.getIdpengeluaran());
+        }
+        if (partialValue.getJumlah() != null) {
+            jdbcTemplate.update("UPDATE pengeluaran SET peng_jumlah=? WHERE peng_id=?", 
+                    partialValue.getJumlah(), partialValue.getIdpengeluaran());
+        }
+        if (partialValue.getKeterangan() != null) {
+            jdbcTemplate.update("UPDATE pengeluaran SET peng_desc=? WHERE peng_id=?", 
+                    partialValue.getKeterangan(), partialValue.getIdpengeluaran());
+        }
+        return getPengeluaranById(partialValue.getIdpengeluaran());
     }
 
     // Contoh query pakai query(), cocok untuk query yang mungkin mereturn lebih dari satu objek

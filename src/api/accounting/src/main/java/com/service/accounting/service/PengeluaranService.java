@@ -8,15 +8,17 @@ import java.util.List;
  * Interface untuk Service dari Pengeluaran
  */
 public interface PengeluaranService {
-    Pengeluaran newPengeluaran(String tanggal, String keterangan, long jumlah);
+    Pengeluaran newPengeluaran(Pengeluaran partialValue);
 
-    Pengeluaran getPengeluaranById(int idpengeluaran);
+    // Pengeluaran getPengeluaranById(int idpengeluaran);
 
-    void changeTanggal(int idpengeluaran, String tanggal);
+    // void changeTanggal(int idpengeluaran, String tanggal);
 
-    void changeKeterangan(int idpengeluaran, String keterangan);
+    // void changeKeterangan(int idpengeluaran, String keterangan);
 
-    void changeJumlah(int idpengeluaran, long jumlah);
+    // void changeJumlah(int idpengeluaran, long jumlah);
+
+    Pengeluaran updatePengeluaran(Pengeluaran partialValue);
 
     List<Pengeluaran> getPengeluaran(Integer start, Integer limit);
 

@@ -1,15 +1,15 @@
 package com.service.accounting.model;
 
 public class Pendapatan {
-    private int idpendapatan;
+    private Integer idpendapatan;
     private String tanggal;
-    private long jumlah;
+    private Long jumlah;
 
-    public int getIdpendapatan() {
+    public Integer getIdpendapatan() {
         return idpendapatan;
     }
 
-    public void setIdpendapatan(int idpendapatan) {
+    public void setIdpendapatan(Integer idpendapatan) {
         this.idpendapatan = idpendapatan;
     }
 
@@ -21,11 +21,11 @@ public class Pendapatan {
         this.tanggal = tanggal;
     }
 
-    public long getJumlah() {
+    public Long getJumlah() {
         return jumlah;
     }
 
-    public void setJumlah(long jumlah) {
+    public void setJumlah(Long jumlah) {
         this.jumlah = jumlah;
     }
 }
