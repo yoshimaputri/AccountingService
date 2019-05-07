@@ -5,6 +5,7 @@ import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pendapatan;
 import com.service.accounting.service.PendapatanService;
+import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class PendapatanController {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
+            InputValidator.validateInputData(pendapatan, true);
             return pendapatanService.newPendapatan(pendapatan);
         } catch (IOException e) {
             throw new InputFormatException();
@@ -41,7 +43,7 @@ public class PendapatanController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
+    @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
     public Pendapatan editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpendapatan,
@@ -51,6 +53,7 @@ public class PendapatanController {
         try {
             Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
             pendapatan.setIdpendapatan(idpendapatan);
+            InputValidator.validateInputData(pendapatan, false);
             return pendapatanService.updatePendapatan(pendapatan);
         } catch (IOException e) {
             throw new InputFormatException();

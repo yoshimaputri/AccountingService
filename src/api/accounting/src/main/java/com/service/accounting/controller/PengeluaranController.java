@@ -5,6 +5,7 @@ import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pengeluaran;
 import com.service.accounting.service.PengeluaranService;
+import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,7 @@ public class PengeluaranController {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Pengeluaran pengeluaran = mapper.readValue(body, Pengeluaran.class);
+            InputValidator.validateInputData(pengeluaran, true);
             return pengeluaranService.newPengeluaran(pengeluaran);
         } catch (IOException e) {
             throw new InputFormatException();
@@ -59,6 +61,7 @@ public class PengeluaranController {
         try {
             Pengeluaran pengeluaran = mapper.readValue(body, Pengeluaran.class);
             pengeluaran.setIdpengeluaran(idpengeluaran);
+            InputValidator.validateInputData(pengeluaran, false);
             return pengeluaranService.updatePengeluaran(pengeluaran);
         } catch (IOException e) {
             throw new InputFormatException();

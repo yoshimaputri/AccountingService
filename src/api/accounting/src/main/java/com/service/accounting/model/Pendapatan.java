@@ -1,7 +1,5 @@
 package com.service.accounting.model;
 
-import com.service.accounting.utils.InputValidator;
-
 public class Pendapatan {
     private Integer idpendapatan;
     private String tanggal;
@@ -20,7 +18,6 @@ public class Pendapatan {
     }
 
     public void setTanggal(String tanggal) {
-        InputValidator.checkValidDate(tanggal);
         this.tanggal = tanggal;
     }
 

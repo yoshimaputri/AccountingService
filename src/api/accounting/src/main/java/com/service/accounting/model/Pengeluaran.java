@@ -1,7 +1,5 @@
 package com.service.accounting.model;
 
-import com.service.accounting.utils.InputValidator;
-
 /**
  * POJO dari objek Pengeluaran
  */
@@ -24,7 +22,6 @@ public class Pengeluaran {
     }
 
     public void setTanggal(String tanggal) {
-        InputValidator.checkValidDate(tanggal);
         this.tanggal = tanggal;
     }
 
@@ -33,7 +30,6 @@ public class Pengeluaran {
     }
 
     public void setKeterangan(String keterangan) {
-        InputValidator.checkValidKeterangan(keterangan);
         this.keterangan = keterangan;
     }
 
