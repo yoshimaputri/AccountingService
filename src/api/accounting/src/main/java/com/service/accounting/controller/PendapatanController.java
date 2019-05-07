@@ -1,5 +1,6 @@
 package com.service.accounting.controller;
 
+import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pendapatan;
 import com.service.accounting.service.PendapatanService;
@@ -43,6 +44,10 @@ public class PendapatanController {
             @RequestParam(name = "tanggal", required = false) String tanggal,
             @RequestParam(name = "jumlah", required = false) Long jumlah
     ) {
+        if (tanggal == null && jumlah == null) {
+            throw new InputFormatException("At least 1 field must contains value");
+        }
+
         if (tanggal != null) {
             InputValidator.checkValidDate(tanggal);
             pendapatanService.changeTanggal(idpendapatan, tanggal);
