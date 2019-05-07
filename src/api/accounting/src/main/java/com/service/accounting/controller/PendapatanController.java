@@ -1,14 +1,16 @@
 package com.service.accounting.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pendapatan;
 import com.service.accounting.service.PendapatanService;
-import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,12 +28,15 @@ public class PendapatanController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public Pendapatan newPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @RequestParam("tanggal") String tanggal,
-            @RequestParam("jumlah") long jumlah
+            @RequestBody String body
     ) {
-        InputValidator.checkValidDate(tanggal);
-
-        return pendapatanService.newPendapatan(tanggal, jumlah);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
+            return pendapatanService.newPendapatan(pendapatan);
+        } catch (IOException e) {
+            throw new InputFormatException();
+        }
     }
 
     @ResponseBody
@@ -40,18 +45,16 @@ public class PendapatanController {
     public Pendapatan editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpendapatan,
-            @RequestParam(name = "tanggal", required = false) String tanggal,
-            @RequestParam(name = "jumlah", required = false) Long jumlah
+            @RequestBody String body
     ) {
-        if (tanggal != null) {
-            InputValidator.checkValidDate(tanggal);
-            pendapatanService.changeTanggal(idpendapatan, tanggal);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
+            pendapatan.setIdpendapatan(idpendapatan);
+            return pendapatanService.updatePendapatan(pendapatan);
+        } catch (IOException e) {
+            throw new InputFormatException();
         }
-        if (jumlah != null) {
-            pendapatanService.changeJumlah(idpendapatan, jumlah);
-        }
-
-        return pendapatanService.getPendapatanById(idpendapatan);
     }
 
     @ResponseBody
