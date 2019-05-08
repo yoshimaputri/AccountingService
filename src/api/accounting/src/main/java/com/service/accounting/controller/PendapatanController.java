@@ -9,6 +9,7 @@ import com.service.accounting.service.PendapatanService;
 import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +29,7 @@ public class PendapatanController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String newPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @RequestBody String body
@@ -45,7 +46,8 @@ public class PendapatanController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+    @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH },
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpendapatan,
@@ -63,7 +65,7 @@ public class PendapatanController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @RequestParam(name = "start", required = false) Integer start,
@@ -80,7 +82,7 @@ public class PendapatanController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/{tahun}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
@@ -94,7 +96,8 @@ public class PendapatanController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun,

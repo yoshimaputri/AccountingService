@@ -9,6 +9,7 @@ import com.service.accounting.service.PengeluaranService;
 import com.service.accounting.utils.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ public class PengeluaranController {
     // Best practice untuk selalu set response status jika yang di-return bukan HTTP Status 200
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String addPengeluaran(
             // Lebih simple membaca header pakai @RequestHeader.
             // Parameter required masih false karena spek token masih belum turun.
@@ -52,7 +53,8 @@ public class PengeluaranController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+    @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH },
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String changePengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpengeluaran,
@@ -70,7 +72,7 @@ public class PengeluaranController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @RequestParam(name = "start", required = false) Integer start,
@@ -87,7 +89,7 @@ public class PengeluaranController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/{tahun}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
@@ -101,7 +103,8 @@ public class PengeluaranController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun,
