@@ -9,7 +9,7 @@ public class PendapatanMapper implements RowMapper<Pendapatan> {
     @Override
     public Pendapatan mapRow(ResultSet rs, int rowNum) throws SQLException {
         Pendapatan pendapatan = new Pendapatan();
-        pendapatan.setIdpendapatan(rs.getInt(1));
+        pendapatan.setIdPendapatan(rs.getInt(1));
         pendapatan.setTanggal(rs.getString(2));
         pendapatan.setJumlah(rs.getLong(3));
 

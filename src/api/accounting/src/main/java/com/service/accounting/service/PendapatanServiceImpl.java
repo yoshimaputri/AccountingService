@@ -21,9 +21,9 @@ public class PendapatanServiceImpl implements PendapatanService {
     }
 
     @Override
-    public Pendapatan newPendapatan(String tanggal, long jumlah) {
+    public Pendapatan newPendapatan(Pendapatan partialValue) {
         String sql = "INSERT INTO pendapatan(pend_tgl, pend_jumlah) VALUES (?, ?)";
-        jdbcTemplate.update(sql, tanggal, jumlah);
+        jdbcTemplate.update(sql, partialValue.getTanggal(), partialValue.getJumlah());
         return getLatestPendapatan();
     }
 
@@ -32,20 +32,22 @@ public class PendapatanServiceImpl implements PendapatanService {
         return jdbcTemplate.queryForObject(sql, new PendapatanMapper());
     }
 
-    @Override
-    public Pendapatan getPendapatanById(int idpendapatan) {
+    private Pendapatan getPendapatanById(int idpendapatan) {
         String sql = "SELECT * FROM pendapatan WHERE pend_id=?";
         return jdbcTemplate.queryForObject(sql, new Object[]{ idpendapatan }, new PendapatanMapper());
     }
 
     @Override
-    public void changeTanggal(int idpendapatan, String tanggal) {
-        jdbcTemplate.update("UPDATE pendapatan SET pend_tgl=? WHERE pend_id=?", tanggal, idpendapatan);
-    }
-
-    @Override
-    public void changeJumlah(int idpendapatan, long jumlah) {
-        jdbcTemplate.update("UPDATE pendapatan SET pend_jumlah=? WHERE pend_id=?", jumlah, idpendapatan);
+    public Pendapatan updatePendapatan(Pendapatan partialValue) {
+        if (partialValue.getTanggal() != null) {
+            jdbcTemplate.update("UPDATE pendapatan SET pend_tgl=? WHERE pend_id=?",
+                    partialValue.getTanggal(), partialValue.getIdPendapatan());
+        }
+        if (partialValue.getJumlah() != null) {
+            jdbcTemplate.update("UPDATE pendapatan SET pend_jumlah=? WHERE pend_id=?",
+                    partialValue.getJumlah(), partialValue.getIdPendapatan());
+        }
+        return getPendapatanById(partialValue.getIdPendapatan());
     }
 
     @Override

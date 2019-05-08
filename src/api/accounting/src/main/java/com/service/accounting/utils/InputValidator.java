@@ -1,6 +1,8 @@
 package com.service.accounting.utils;
 
 import com.service.accounting.exception.InputFormatException;
+import com.service.accounting.model.Pendapatan;
+import com.service.accounting.model.Pengeluaran;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,7 +10,7 @@ import java.util.regex.Pattern;
 public class InputValidator {
     private InputValidator() { }
 
-    public static void checkValidDate(String date) {
+    private static void checkValidDate(String date) {
         boolean status;
         Pattern datePattern = Pattern.compile("((19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])");
         Matcher matcher = datePattern.matcher(date);
@@ -37,9 +39,58 @@ public class InputValidator {
         }
     }
 
-    public static void checkValidKeterangan(String keterangan) {
-        if (keterangan.isEmpty() || keterangan.length() > 200) {
-            throw new InputFormatException("The field 'keterangan' exceeds maximum length (200 characters)");
+    private static void checkValidKeterangan(String keterangan) {
+        if (keterangan.isEmpty()) {
+            throw new InputFormatException("Field 'keterangan' cannot be null or empty");
+        }
+        if (keterangan.length() > 200) {
+            throw new InputFormatException("Field 'keterangan' exceeds maximum length (200 characters)");
+        }
+    }
+
+    public static void validateInputData(Pendapatan partialValue, boolean insertMode) {
+        if (insertMode) {
+            if (partialValue.getJumlah() == null) {
+                throw new InputFormatException("Field 'jumlah' cannot be null or empty");
+            }
+            if (partialValue.getTanggal() == null) {
+                throw new InputFormatException("Field 'tanggal' cannot be null or empty");
+            }
+            checkValidDate(partialValue.getTanggal());
+        } else {
+            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null) {
+                throw new InputFormatException("At least 1 field must contains value");
+            }
+            if (partialValue.getTanggal() != null) {
+                checkValidDate(partialValue.getTanggal());
+            }
+        }
+    }
+
+    public static void validateInputData(Pengeluaran partialValue, boolean insertMode) {
+        if (insertMode) {
+            if (partialValue.getJumlah() == null) {
+                throw new InputFormatException("Field 'jumlah' cannot be null or empty");
+            }
+            if (partialValue.getTanggal() == null) {
+                throw new InputFormatException("Field 'tanggal' cannot be null or empty");
+            }
+            if (partialValue.getKeterangan() == null) {
+                throw new InputFormatException("Field 'keterangan' cannot be null or empty");
+            }
+            checkValidDate(partialValue.getTanggal());
+            checkValidKeterangan(partialValue.getKeterangan());
+        } else {
+            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null
+                    && partialValue.getKeterangan() == null) {
+                throw new InputFormatException("At least 1 field must contains value");
+            }
+            if (partialValue.getTanggal() != null) {
+                checkValidDate(partialValue.getTanggal());
+            }
+            if (partialValue.getKeterangan() != null) {
+                checkValidKeterangan(partialValue.getKeterangan());
+            }
         }
     }
 }
