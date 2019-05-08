@@ -4,17 +4,17 @@ package com.service.accounting.model;
  * POJO dari objek Pengeluaran
  */
 public class Pengeluaran {
-    private Integer idpengeluaran;
+    private Integer idPengeluaran;
     private String tanggal;
     private String keterangan;
     private Long jumlah;
 
-    public Integer getIdpengeluaran() {
-        return idpengeluaran;
+    public Integer getIdPengeluaran() {
+        return idPengeluaran;
     }
 
-    public void setIdpengeluaran(Integer idpengeluaran) {
-        this.idpengeluaran = idpengeluaran;
+    public void setIdPengeluaran(Integer idPengeluaran) {
+        this.idPengeluaran = idPengeluaran;
     }
 
     public String getTanggal() {

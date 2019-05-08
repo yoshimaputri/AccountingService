@@ -13,7 +13,7 @@ public class PengeluaranMapper implements RowMapper<Pengeluaran> {
     @Override
     public Pengeluaran mapRow(ResultSet rs, int rowNum) throws SQLException {
         Pengeluaran pengeluaran = new Pengeluaran();
-        pengeluaran.setIdpengeluaran(rs.getInt(1));
+        pengeluaran.setIdPengeluaran(rs.getInt(1));
         pengeluaran.setTanggal(rs.getString(2));
         pengeluaran.setKeterangan(rs.getString(3));
         pengeluaran.setJumlah(rs.getLong(4));

@@ -10,14 +10,6 @@ import java.util.List;
 public interface PengeluaranService {
     Pengeluaran newPengeluaran(Pengeluaran partialValue);
 
-    // Pengeluaran getPengeluaranById(int idpengeluaran);
-
-    // void changeTanggal(int idpengeluaran, String tanggal);
-
-    // void changeKeterangan(int idpengeluaran, String keterangan);
-
-    // void changeJumlah(int idpengeluaran, long jumlah);
-
     Pengeluaran updatePengeluaran(Pengeluaran partialValue);
 
     List<Pengeluaran> getPengeluaran(Integer start, Integer limit);

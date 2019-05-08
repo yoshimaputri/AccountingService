@@ -1,6 +1,7 @@
 package com.service.accounting.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pendapatan;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/pendapatan")
 public class PendapatanController {
     private PendapatanService pendapatanService;
+    private ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
     @Autowired
     public void setPendapatanService(PendapatanService pendapatanService) {
@@ -27,15 +29,15 @@ public class PendapatanController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Pendapatan newPendapatan(
+    public String newPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @RequestBody String body
     ) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
             InputValidator.validateInputData(pendapatan, true);
-            return pendapatanService.newPendapatan(pendapatan);
+            Pendapatan result = pendapatanService.newPendapatan(pendapatan);
+            return mapper.writeValueAsString(result);
         } catch (IOException e) {
             throw new InputFormatException();
         }
@@ -44,17 +46,17 @@ public class PendapatanController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
-    public Pendapatan editPendapatan(
+    public String editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idpendapatan,
             @RequestBody String body
     ) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
-            pendapatan.setIdpendapatan(idpendapatan);
+            pendapatan.setIdPendapatan(idpendapatan);
             InputValidator.validateInputData(pendapatan, false);
-            return pendapatanService.updatePendapatan(pendapatan);
+            Pendapatan result = pendapatanService.updatePendapatan(pendapatan);
+            return mapper.writeValueAsString(result);
         } catch (IOException e) {
             throw new InputFormatException();
         }
@@ -62,33 +64,48 @@ public class PendapatanController {
 
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Pendapatan> getPendapatan(
+    public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @RequestParam(name = "start", required = false) Integer start,
             @RequestParam(name = "limit", required = false) Integer limit,
             HttpServletResponse response
     ) {
         response.addHeader("X-Total-Count", pendapatanService.getNumberOfPendapatan().toString());
-        return pendapatanService.getPendapatan(start, limit);
+        List<Pendapatan> result = pendapatanService.getPendapatan(start, limit);
+        try {
+            return mapper.writeValueAsString(result);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @ResponseBody
     @RequestMapping(value = "/{tahun}", method = RequestMethod.GET)
-    public List<Pendapatan> getPendapatan(
+    public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun
     ) {
-        return pendapatanService.getPendapatanByPeriod(tahun);
+        List<Pendapatan> result =  pendapatanService.getPendapatanByPeriod(tahun);
+        try {
+            return mapper.writeValueAsString(result);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @ResponseBody
     @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET)
-    public List<Pendapatan> getPendapatan(
+    public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") int tahun,
             @PathVariable("bulan") int bulan
     ) {
-        return pendapatanService.getPendapatanByPeriod(tahun, bulan);
+        List<Pendapatan> result = pendapatanService.getPendapatanByPeriod(tahun, bulan);
+        try {
+            return mapper.writeValueAsString(result);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @ResponseBody

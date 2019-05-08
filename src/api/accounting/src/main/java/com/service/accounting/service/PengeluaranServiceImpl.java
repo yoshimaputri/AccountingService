@@ -46,17 +46,17 @@ public class PengeluaranServiceImpl implements PengeluaranService {
     public Pengeluaran updatePengeluaran(Pengeluaran partialValue) {
         if (partialValue.getTanggal() != null) {
             jdbcTemplate.update("UPDATE pengeluaran SET peng_tgl=? WHERE peng_id=?", 
-                    partialValue.getTanggal(), partialValue.getIdpengeluaran());
+                    partialValue.getTanggal(), partialValue.getIdPengeluaran());
         }
         if (partialValue.getJumlah() != null) {
             jdbcTemplate.update("UPDATE pengeluaran SET peng_jumlah=? WHERE peng_id=?", 
-                    partialValue.getJumlah(), partialValue.getIdpengeluaran());
+                    partialValue.getJumlah(), partialValue.getIdPengeluaran());
         }
         if (partialValue.getKeterangan() != null) {
             jdbcTemplate.update("UPDATE pengeluaran SET peng_desc=? WHERE peng_id=?", 
-                    partialValue.getKeterangan(), partialValue.getIdpengeluaran());
+                    partialValue.getKeterangan(), partialValue.getIdPengeluaran());
         }
-        return getPengeluaranById(partialValue.getIdpengeluaran());
+        return getPengeluaranById(partialValue.getIdPengeluaran());
     }
 
     // Contoh query pakai query(), cocok untuk query yang mungkin mereturn lebih dari satu objek

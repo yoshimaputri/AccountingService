@@ -41,13 +41,13 @@ public class PendapatanServiceImpl implements PendapatanService {
     public Pendapatan updatePendapatan(Pendapatan partialValue) {
         if (partialValue.getTanggal() != null) {
             jdbcTemplate.update("UPDATE pendapatan SET pend_tgl=? WHERE pend_id=?", 
-                    partialValue.getTanggal(), partialValue.getIdpendapatan());
+                    partialValue.getTanggal(), partialValue.getIdPendapatan());
         }
         if (partialValue.getJumlah() != null) {
             jdbcTemplate.update("UPDATE pendapatan SET pend_jumlah=? WHERE pend_id=?", 
-                    partialValue.getJumlah(), partialValue.getIdpendapatan());
+                    partialValue.getJumlah(), partialValue.getIdPendapatan());
         }
-        return getPendapatanById(partialValue.getIdpendapatan());
+        return getPendapatanById(partialValue.getIdPendapatan());
     }
 
     @Override
