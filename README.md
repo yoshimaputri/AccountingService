@@ -1,6 +1,6 @@
 # AccountingService
 
-This is master branch, accept form-data instead json. Use json-request if you want the version that accept the JSON.
+Branch ini berisi versi API yang menerima JSON-data. Gunakan branch master jika ingin versi yang menggunakan Multipart Form/URL-encoded form.
 
 ## Anggota
 
@@ -13,5 +13,28 @@ This is master branch, accept form-data instead json. Use json-request if you wa
 - [x] Datamodel
 - [x] Implementation
 - [ ] Documentation
-- [ ] Testing
+- [x] Testing
 
+## Documentation
+
+For detail in swagger documentation: <link>
+
+### POST
+```
+/pendapatan
+/pengeluaran
+```
+### PUT|PATCH
+```
+/pendapatan/{id}
+/pengeluaran/{id}
+```
+### GET
+```
+/pendapatan
+/pendapatan/{tahun}
+/pendapatan/{tahun}/{bulan}
+/pengeluaran
+/pengeluaran/{tahun}
+/pengeluaran/{tahun}/{bulan}
+```
