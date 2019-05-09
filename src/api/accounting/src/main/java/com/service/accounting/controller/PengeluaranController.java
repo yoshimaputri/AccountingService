@@ -89,9 +89,10 @@ public class PengeluaranController {
     @RequestMapping(value = "/{tahun}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
-            @PathVariable("tahun") int tahun
+            @PathVariable("tahun") String tahun
     ) {
-        List<Pengeluaran> result = pengeluaranService.getPengeluaranByPeriod(tahun);
+        InputValidator.checkValidPath(tahun, null);
+        List<Pengeluaran> result = pengeluaranService.getPengeluaranByPeriod(Integer.parseInt(tahun));
         try {
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
@@ -104,10 +105,12 @@ public class PengeluaranController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
-            @PathVariable("tahun") int tahun,
-            @PathVariable("bulan") int bulan
+            @PathVariable("tahun") String tahun,
+            @PathVariable("bulan") String bulan
     ) {
-        List<Pengeluaran> result = pengeluaranService.getPengeluaranByPeriod(tahun, bulan);
+        InputValidator.checkValidPath(tahun, bulan);
+        List<Pengeluaran> result = pengeluaranService
+                .getPengeluaranByPeriod(Integer.parseInt(tahun), Integer.parseInt(bulan));
         try {
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
@@ -124,7 +127,7 @@ public class PengeluaranController {
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deletePengeluaran(
-            @PathVariable("id") int idpengeluaran
+            @PathVariable("id") int idPengeluaran
     ) {
         throw new NotAllowedException();
     }
