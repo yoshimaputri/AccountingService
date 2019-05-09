@@ -12,7 +12,7 @@ Branch ini berisi versi API yang menerima JSON-data. Gunakan branch master jika 
 
 - [x] Datamodel
 - [x] Implementation
-- [ ] Documentation
+- [x] Documentation
 - [x] Testing
 
 ## Documentation
