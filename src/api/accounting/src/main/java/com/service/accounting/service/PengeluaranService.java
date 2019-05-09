@@ -16,7 +16,7 @@ public interface PengeluaranService {
 
     Integer getNumberOfPengeluaran();
 
-    List<Pengeluaran> getPengeluaranByPeriod(int tahun);
+    List<Pengeluaran> getPengeluaranByPeriod(String tahun);
 
-    List<Pengeluaran> getPengeluaranByPeriod(int tahun, int bulan);
+    List<Pengeluaran> getPengeluaranByPeriod(String tahun, String bulan);
 }
