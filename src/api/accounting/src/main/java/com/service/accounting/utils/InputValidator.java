@@ -93,4 +93,13 @@ public class InputValidator {
             }
         }
     }
+
+    public static void checkValidPath(String year, String month) {
+        if (year != null && !year.matches("(19|20)\\d\\d")) {
+            throw new InputFormatException("Year should be in YYYY format.");
+        }
+        if (month != null && !month.matches("0[1-9]|1[012]")) {
+            throw new InputFormatException("Month should be in MM format.");
+        }
+    }
 }
