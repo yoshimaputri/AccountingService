@@ -48,11 +48,11 @@ public class PendapatanController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @PathVariable("id") int idpendapatan,
+            @PathVariable("id") int idPendapatan,
             @ModelAttribute Pendapatan pendapatan
     ) {
         try {
-            pendapatan.setIdPendapatan(idpendapatan);
+            pendapatan.setIdPendapatan(idPendapatan);
             InputValidator.validateInputData(pendapatan, false);
             Pendapatan result = pendapatanService.updatePendapatan(pendapatan);
             return mapper.writeValueAsString(result);

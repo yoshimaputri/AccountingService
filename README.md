@@ -1,5 +1,7 @@
 # AccountingService
 
+This is master branch, accept form-data instead json. Use json-request if you want the version that accept the JSON.
+
 ## Anggota
 
 1. 05111640000022 - Yoshima Syach Putri
@@ -9,28 +11,7 @@
 ## Milestone Checklist
 
 - [x] Datamodel
-- [ ] Implementation
+- [x] Implementation
 - [ ] Documentation
 - [ ] Testing
 
-## Doc
-
-### POST
-```
-/pendapatan
-/pengeluaran
-```
-### PUT|PATCH
-```
-/pendapatan/{id}
-/pengeluaran/{id}
-```
-### GET
-```
-/pendapatan
-/pendapatan/{tahun}
-/pendapatan/{tahun}/{bulan}
-/pengeluaran
-/pengeluaran/{tahun}
-/pengeluaran/{tahun}/{bulan}
-```
