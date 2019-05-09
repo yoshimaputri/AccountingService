@@ -17,7 +17,8 @@ Branch ini berisi versi API yang menerima JSON-data. Gunakan branch master jika 
 
 ## Documentation
 
-For detail in swagger documentation: <link>
+For detail in swagger documentation: 
+`https://app.swaggerhub.com/apis-docs/yoshimaputri/swagger-accounting/1.0.0`
 
 ### POST
 ```

@@ -1,0 +1,317 @@
+---
+swagger: "2.0"
+info:
+  description: This is a swagger documentation for Accounting Service.
+  version: 1.0.0
+  title: Documentation Accounting Service
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: yoshimashima@gmail.com
+host: ojoakua.site
+basePath: /accounting
+tags:
+- name: admins
+  description: Usage for accounting officer
+schemes:
+- https
+- http
+paths:
+  /pendapatan:
+    get:
+      tags:
+      - admins
+      summary: Menampilkan seluruh record pendapatan
+      operationId: getPendapatan
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: not successful operation
+    post:
+      tags:
+      - admins
+      summary: Memasukkan jumlah pendapatan pada waktu tertentu
+      operationId: postPendapatan
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        description: Waktu dan jumlah pendapatan
+        required: true
+        schema:
+          $ref: '#/definitions/Pendapatan'
+      responses:
+        201:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: Invalid input
+  /pengeluaran:
+    get:
+      tags:
+      - admins
+      summary: Menampilkan seluruh record pengeluaran
+      operationId: getPengeluaran
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: not successful operation
+    post:
+      tags:
+      - admins
+      summary: Memasukkan jumlah pengeluaran pada waktu tertentu
+      operationId: postPengeluaran
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        description: Waktu dan jumlah pengeluaran
+        required: true
+        schema:
+          $ref: '#/definitions/Pengeluaran'
+      responses:
+        201:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: Invalid input
+  /pendapatan/{id}:
+    put:
+      tags:
+      - admins
+      summary: Melakukan perubahan pada data pendapatan berdasarkan id
+      operationId: putPendapatan
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        required: true
+      - in: body
+        name: data
+        description: Waktu dan jumlah pendapatan
+        required: true
+        schema:
+          $ref: '#/definitions/Pendapatan'
+      responses:
+        201:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: Invalid input
+    patch:
+      tags:
+      - admins
+      summary: Melakukan perubahan pada data pendapatan berdasarkan id
+      operationId: patchPendapatan
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        required: true
+      - in: body
+        name: data
+        description: Waktu dan jumlah pendapatan
+        required: true
+        schema:
+          $ref: '#/definitions/Pendapatan'
+      responses:
+        201:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: Invalid input
+  /pengeluaran/{id}:
+    put:
+      tags:
+      - admins
+      summary: Melakukan perubahan pada data pengeluaran berdasarkan id
+      operationId: putPengeluaran
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        required: true
+      - in: body
+        name: data
+        description: Waktu dan jumlah pengeluaran
+        required: true
+        schema:
+          $ref: '#/definitions/Pengeluaran'
+      responses:
+        201:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: Invalid input
+    patch:
+      tags:
+      - admins
+      summary: Melakukan perubahan pada data pengeluaran berdasarkan id
+      operationId: patchPengeluaran
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        required: true
+      - in: body
+        name: data
+        description: Waktu dan jumlah pengeluaran
+        required: true
+        schema:
+          $ref: '#/definitions/Pengeluaran'
+      responses:
+        201:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: Invalid input
+  /pendapatan/{tahun}:
+    get:
+      tags:
+      - admins
+      summary: Menampilkan seluruh record pendapatan berdasarkan tahun
+      operationId: getPendapatanT
+      produces:
+      - application/json
+      parameters:
+      - name: tahun
+        in: path
+        required: true
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: not successful operation
+  /pendapatan/{tahun}/{bulan}:
+    get:
+      tags:
+      - admins
+      summary: Menampilkan seluruh record pendapatan berdasarkan bulan dan tahun
+      operationId: getPendapatanTB
+      produces:
+      - application/json
+      parameters:
+      - name: tahun
+        in: path
+        required: true
+      - name: bulan
+        in: path
+        required: true
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: not successful operation
+  /pengeluaran/{tahun}:
+    get:
+      tags:
+      - admins
+      summary: Menampilkan seluruh record pengeluaran berdasarkan tahun
+      operationId: getPengeluaranT
+      produces:
+      - application/json
+      parameters:
+      - name: tahun
+        in: path
+        required: true
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: not successful operation
+  /pengeluaran/{tahun}/{bulan}:
+    get:
+      tags:
+      - admins
+      summary: Menampilkan seluruh record pengeluaran berdasarkan bulan dan tahun
+      operationId: getPengeluaranTB
+      produces:
+      - application/json
+      parameters:
+      - name: tahun
+        in: path
+        required: true
+      - name: bulan
+        in: path
+        required: true
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: bad request
+        404:
+          description: not successful operation
+definitions:
+  Pendapatan:
+    type: object
+    required:
+    - jumlah
+    - tanggal
+    properties:
+      tanggal:
+        type: string
+        format: date-time
+        example: 2019-06-25
+      jumlah:
+        type: number
+        format: money
+        example: 2150000.0
+  Pengeluaran:
+    type: object
+    required:
+    - jumlah
+    - keterangan
+    - tanggal
+    properties:
+      tanggal:
+        type: string
+        format: date-time
+        example: 2019-06-25
+      jumlah:
+        type: number
+        format: money
+        example: 2150000.0
+      keterangan:
+        type: string
+        example: Pembelian bahan baku
