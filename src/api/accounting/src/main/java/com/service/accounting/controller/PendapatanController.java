@@ -83,8 +83,9 @@ public class PendapatanController {
     @RequestMapping(value = "/{tahun}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @PathVariable("tahun") int tahun
+            @PathVariable("tahun") String tahun
     ) {
+        InputValidator.checkValidPath(tahun, null);
         List<Pendapatan> result =  pendapatanService.getPendapatanByPeriod(tahun);
         try {
             return mapper.writeValueAsString(result);
@@ -98,9 +99,10 @@ public class PendapatanController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @PathVariable("tahun") int tahun,
-            @PathVariable("bulan") int bulan
+            @PathVariable("tahun") String tahun,
+            @PathVariable("bulan") String bulan
     ) {
+        InputValidator.checkValidPath(tahun, bulan);
         List<Pendapatan> result = pendapatanService.getPendapatanByPeriod(tahun, bulan);
         try {
             return mapper.writeValueAsString(result);
@@ -118,7 +120,7 @@ public class PendapatanController {
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deletePendapatan(
-            @PathVariable("id") int idpendapatan
+            @PathVariable("id") int idPendapatan
     ) {
         throw new NotAllowedException();
     }

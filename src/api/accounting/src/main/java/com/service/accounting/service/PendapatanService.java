@@ -13,7 +13,7 @@ public interface PendapatanService {
 
     Integer getNumberOfPendapatan();
 
-    List<Pendapatan> getPendapatanByPeriod(int tahun);
+    List<Pendapatan> getPendapatanByPeriod(String tahun);
 
-    List<Pendapatan> getPendapatanByPeriod(int tahun, int bulan);
+    List<Pendapatan> getPendapatanByPeriod(String tahun, String bulan);
 }
