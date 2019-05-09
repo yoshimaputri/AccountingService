@@ -86,7 +86,7 @@ public class PendapatanController {
             @PathVariable("tahun") String tahun
     ) {
         InputValidator.checkValidPath(tahun, null);
-        List<Pendapatan> result =  pendapatanService.getPendapatanByPeriod(Integer.parseInt(tahun));
+        List<Pendapatan> result =  pendapatanService.getPendapatanByPeriod(tahun);
         try {
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
@@ -103,8 +103,7 @@ public class PendapatanController {
             @PathVariable("bulan") String bulan
     ) {
         InputValidator.checkValidPath(tahun, bulan);
-        List<Pendapatan> result = pendapatanService
-                .getPendapatanByPeriod(Integer.parseInt(tahun), Integer.parseInt(bulan));
+        List<Pendapatan> result = pendapatanService.getPendapatanByPeriod(tahun, bulan);
         try {
             return mapper.writeValueAsString(result);
         } catch (IOException e) {

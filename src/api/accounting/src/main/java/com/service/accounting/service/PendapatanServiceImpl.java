@@ -77,13 +77,13 @@ public class PendapatanServiceImpl implements PendapatanService {
     }
 
     @Override
-    public List<Pendapatan> getPendapatanByPeriod(int tahun) {
+    public List<Pendapatan> getPendapatanByPeriod(String tahun) {
         String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ tahun }, new PendapatanMapper());
     }
 
     @Override
-    public List<Pendapatan> getPendapatanByPeriod(int tahun, int bulan) {
+    public List<Pendapatan> getPendapatanByPeriod(String tahun, String bulan) {
         String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=? AND EXTRACT(MONTH FROM pend_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ tahun, bulan }, new PendapatanMapper());
     }
