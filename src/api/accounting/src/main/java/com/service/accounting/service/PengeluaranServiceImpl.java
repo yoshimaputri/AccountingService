@@ -64,6 +64,7 @@ public class PengeluaranServiceImpl implements PengeluaranService {
     @Override
     public List<Pengeluaran> getPengeluaran(Integer start, Integer limit) {
         if (start != null) {
+            start--;
             if (start < 0) {
                 throw new InputFormatException("Start value must greater than 0.");
             }
