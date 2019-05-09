@@ -32,10 +32,9 @@ public class PendapatanController {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String newPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @RequestBody String body
+            @RequestBody Pendapatan pendapatan
     ) {
         try {
-            Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
             InputValidator.validateInputData(pendapatan, true);
             Pendapatan result = pendapatanService.newPendapatan(pendapatan);
             return mapper.writeValueAsString(result);
@@ -50,12 +49,11 @@ public class PendapatanController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @PathVariable("id") int idpendapatan,
-            @RequestBody String body
+            @PathVariable("id") int idPendapatan,
+            @RequestBody Pendapatan pendapatan
     ) {
         try {
-            Pendapatan pendapatan = mapper.readValue(body, Pendapatan.class);
-            pendapatan.setIdPendapatan(idpendapatan);
+            pendapatan.setIdPendapatan(idPendapatan);
             InputValidator.validateInputData(pendapatan, false);
             Pendapatan result = pendapatanService.updatePendapatan(pendapatan);
             return mapper.writeValueAsString(result);
