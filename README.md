@@ -13,5 +13,28 @@ Branch ini berisi versi API yang menerima JSON-data. Gunakan branch master jika 
 - [x] Datamodel
 - [x] Implementation
 - [ ] Documentation
-- [ ] Testing
+- [x] Testing
 
+## Documentation
+
+For detail in swagger documentation: <link>
+
+### POST
+```
+/pendapatan
+/pengeluaran
+```
+### PUT|PATCH
+```
+/pendapatan/{id}
+/pengeluaran/{id}
+```
+### GET
+```
+/pendapatan
+/pendapatan/{tahun}
+/pendapatan/{tahun}/{bulan}
+/pengeluaran
+/pengeluaran/{tahun}
+/pengeluaran/{tahun}/{bulan}
+```
