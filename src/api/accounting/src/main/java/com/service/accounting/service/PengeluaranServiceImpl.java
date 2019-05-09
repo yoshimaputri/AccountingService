@@ -1,5 +1,6 @@
 package com.service.accounting.service;
 
+import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.model.Pengeluaran;
 import com.service.accounting.model.PengeluaranMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,14 @@ public class PengeluaranServiceImpl implements PengeluaranService {
     @Override
     public List<Pengeluaran> getPengeluaran(Integer start, Integer limit) {
         if (start != null) {
+            start--;
+            if (start < 0) {
+                throw new InputFormatException("Start value must greater than 0.");
+            }
             if (limit != null) {
+                if (limit < 1) {
+                    throw new InputFormatException("Limit value must greater than 0.");
+                }
                 return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
                         new PengeluaranMapper(), start, limit);
             } else {
@@ -72,6 +80,9 @@ public class PengeluaranServiceImpl implements PengeluaranService {
             }
         } else {
             if (limit != null) {
+                if (limit < 1) {
+                    throw new InputFormatException("Limit value must greater than 0.");
+                }
                 return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
                         new PengeluaranMapper(), 0, limit);
             } else {

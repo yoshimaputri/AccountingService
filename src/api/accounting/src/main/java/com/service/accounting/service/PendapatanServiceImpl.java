@@ -1,5 +1,6 @@
 package com.service.accounting.service;
 
+import com.service.accounting.exception.InputFormatException;
 import com.service.accounting.model.Pendapatan;
 import com.service.accounting.model.PendapatanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,14 @@ public class PendapatanServiceImpl implements PendapatanService {
     @Override
     public List<Pendapatan> getPendapatan(Integer start, Integer limit) {
         if (start != null) {
+            start--;
+            if (start < 0) {
+                throw new InputFormatException("Start value must greater than 0.");
+            }
             if (limit != null) {
+                if (limit < 1) {
+                    throw new InputFormatException("Limit value must greater than 0.");
+                }
                 return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
                         new PendapatanMapper(), start, limit);
             } else {
@@ -62,6 +70,9 @@ public class PendapatanServiceImpl implements PendapatanService {
             }
         } else {
             if (limit != null) {
+                if (limit < 1) {
+                    throw new InputFormatException("Limit value must greater than 0.");
+                }
                 return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
                         new PendapatanMapper(), 0, limit);
             } else {
