@@ -1,6 +1,6 @@
 # AccountingService
 
-Branch ini berisi versi API yang menerima JSON-data. Gunakan branch master jika ingin versi yang menggunakan Multipart Form/URL-encoded form.
+Sistem Informasi Accounting Restoran. 
 
 ## Anggota
 
@@ -15,27 +15,36 @@ Branch ini berisi versi API yang menerima JSON-data. Gunakan branch master jika 
 - [x] Documentation
 - [x] Testing
 
+## Revision Checklist
+- [ ] Datamodel
+- [ ] Implementation
+- [ ] Documentation
+- [ ] Testing
+
 ## Documentation
 
-For detail in swagger documentation: 
-`https://app.swaggerhub.com/apis-docs/yoshimaputri/swagger-accounting/1.0.0`
+Swagger documentation: 
+https://app.swaggerhub.com/apis-docs/yoshimaputri/swagger-accounting/1.0.0
 
-### POST
+## Available Endpoints
+
+These endpoints consumes JSON and produces JSON. Form-data version has been deprecated and we will focus on JSON-version only.
+
 ```
-/pendapatan
-/pengeluaran
+POST /pendapatan
+POST /pengeluaran
+
+PUT /pendapatan/{id}
+PUT /pengeluaran/{id}
+
+PATCH /pendapatan/{id}
+PATCH /pengeluaran/{id}
+
+GET /pendapatan
+GET /pendapatan/{tahun}
+GET /pendapatan/{tahun}/{bulan}
+GET /pengeluaran
+GET /pengeluaran/{tahun}
+GET /pengeluaran/{tahun}/{bulan}
 ```
-### PUT|PATCH
-```
-/pendapatan/{id}
-/pengeluaran/{id}
-```
-### GET
-```
-/pendapatan
-/pendapatan/{tahun}
-/pendapatan/{tahun}/{bulan}
-/pengeluaran
-/pengeluaran/{tahun}
-/pengeluaran/{tahun}/{bulan}
-```
+
