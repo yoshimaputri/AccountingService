@@ -59,9 +59,8 @@ public class PengeluaranController {
             @RequestBody Pengeluaran pengeluaran
     ) {
         try {
-            pengeluaran.setIdPengeluaran(idPengeluaran);
             InputValidator.validateInputData(pengeluaran, false);
-            Pengeluaran result = pengeluaranService.updatePengeluaran(pengeluaran);
+            Pengeluaran result = pengeluaranService.updatePengeluaran(idPengeluaran, pengeluaran);
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());

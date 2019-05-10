@@ -52,9 +52,8 @@ public class PendapatanController {
             @RequestBody Pendapatan pendapatan
     ) {
         try {
-            pendapatan.setIdPendapatan(idPendapatan);
             InputValidator.validateInputData(pendapatan, false);
-            Pendapatan result = pendapatanService.updatePendapatan(pendapatan);
+            Pendapatan result = pendapatanService.updatePendapatan(idPendapatan, pendapatan);
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());

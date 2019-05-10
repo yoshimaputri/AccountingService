@@ -1,13 +1,12 @@
 package com.service.accounting.service;
 
 import com.service.accounting.exception.InputFormatException;
+import com.service.accounting.exception.NotFoundException;
 import com.service.accounting.model.Pengeluaran;
-import com.service.accounting.model.PengeluaranMapper;
+import com.service.accounting.repository.PengeluaranRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -15,52 +14,43 @@ import java.util.List;
  */
 @Service
 public class PengeluaranServiceImpl implements PengeluaranService {
-    private DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
+    private PengeluaranRepository repository;
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    public void setRepository(PengeluaranRepository repository) {
+        this.repository = repository;
     }
 
-    // Contoh query pakai update(), cocok untuk query yang tidak return object
     @Override
     public Pengeluaran newPengeluaran(Pengeluaran partialValue) {
-        String sql = "INSERT INTO pengeluaran(peng_tgl, peng_desc, peng_jumlah) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, partialValue.getTanggal(), partialValue.getKeterangan(), partialValue.getJumlah());
-        return getLatestPengeluaran();
-    }
-
-    // Contoh query pakai queryForObject(), cocok untuk query yang pasti me-return tepat satu objek.
-    private Pengeluaran getLatestPengeluaran() {
-        String sql = "SELECT * FROM pengeluaran ORDER BY peng_id DESC LIMIT 1";
-        return jdbcTemplate.queryForObject(sql, new PengeluaranMapper());
-    }
-
-    private Pengeluaran getPengeluaranById(int idpengeluaran) {
-        String sql = "SELECT * FROM pengeluaran WHERE peng_id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{ idpengeluaran }, new PengeluaranMapper());
+        return repository.save(partialValue);
     }
 
     @Override
-    public Pengeluaran updatePengeluaran(Pengeluaran partialValue) {
-        if (partialValue.getTanggal() != null) {
-            jdbcTemplate.update("UPDATE pengeluaran SET peng_tgl=? WHERE peng_id=?", 
-                    partialValue.getTanggal(), partialValue.getIdPengeluaran());
-        }
-        if (partialValue.getJumlah() != null) {
-            jdbcTemplate.update("UPDATE pengeluaran SET peng_jumlah=? WHERE peng_id=?", 
-                    partialValue.getJumlah(), partialValue.getIdPengeluaran());
-        }
-        if (partialValue.getKeterangan() != null) {
-            jdbcTemplate.update("UPDATE pengeluaran SET peng_desc=? WHERE peng_id=?", 
-                    partialValue.getKeterangan(), partialValue.getIdPengeluaran());
-        }
-        return getPengeluaranById(partialValue.getIdPengeluaran());
+    public Pengeluaran getPengeluaranById(int id) {
+        return repository.get(id);
     }
 
-    // Contoh query pakai query(), cocok untuk query yang mungkin mereturn lebih dari satu objek
+    @Override
+    public Pengeluaran updatePengeluaran(int idPengeluaran, Pengeluaran partialValue) {
+        Pengeluaran pengeluaran = repository.get(idPengeluaran);
+        if (pengeluaran != null) {
+            if (partialValue.getTanggal() != null) {
+                pengeluaran.setTanggal(partialValue.getTanggal());
+            }
+            if (partialValue.getKeterangan() != null) {
+                pengeluaran.setKeterangan(partialValue.getKeterangan());
+            }
+            if (partialValue.getJumlah() != null) {
+                pengeluaran.setJumlah(partialValue.getJumlah());
+            }
+
+            return repository.update(pengeluaran);
+        } else {
+            throw new NotFoundException("Pengeluaran", idPengeluaran);
+        }
+    }
+
     @Override
     public List<Pengeluaran> getPengeluaran(Integer start, Integer limit) {
         if (start != null) {
@@ -72,40 +62,34 @@ public class PengeluaranServiceImpl implements PengeluaranService {
                 if (limit < 1) {
                     throw new InputFormatException("Limit value must greater than 0.");
                 }
-                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
-                        new PengeluaranMapper(), start, limit);
+                return repository.get(start, limit);
             } else {
-                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
-                        new PengeluaranMapper(), start, 30);
+                return repository.get(start, 30);
             }
         } else {
             if (limit != null) {
                 if (limit < 1) {
                     throw new InputFormatException("Limit value must greater than 0.");
                 }
-                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT ?, ?",
-                        new PengeluaranMapper(), 0, limit);
+                return repository.get(0, limit);
             } else {
-                return jdbcTemplate.query("SELECT * FROM pengeluaran LIMIT 300", new PengeluaranMapper());
+                return repository.get(0, 300);
             }
         }
     }
 
     @Override
     public Integer getNumberOfPengeluaran() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM pengeluaran",
-                (rs, i) -> rs.getInt(1));
+        return repository.count();
     }
 
     @Override
     public List<Pengeluaran> getPengeluaranByPeriod(String tahun) {
-        String sql = "SELECT * FROM pengeluaran WHERE EXTRACT(YEAR FROM peng_tgl)=?";
-        return jdbcTemplate.query(sql, new Object[]{ tahun }, new PengeluaranMapper());
+        return repository.getByPeriod(tahun);
     }
 
     @Override
     public List<Pengeluaran> getPengeluaranByPeriod(String tahun, String bulan) {
-        String sql = "SELECT * FROM pengeluaran WHERE EXTRACT(YEAR FROM peng_tgl)=? AND EXTRACT(MONTH FROM peng_tgl)=?";
-        return jdbcTemplate.query(sql, new Object[]{ tahun, bulan }, new PengeluaranMapper());
+        return repository.getByPeriod(tahun, bulan);
     }
 }

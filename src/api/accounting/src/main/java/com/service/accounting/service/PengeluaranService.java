@@ -10,7 +10,9 @@ import java.util.List;
 public interface PengeluaranService {
     Pengeluaran newPengeluaran(Pengeluaran partialValue);
 
-    Pengeluaran updatePengeluaran(Pengeluaran partialValue);
+    Pengeluaran updatePengeluaran(int idPengeluaran, Pengeluaran partialValue);
+
+    Pengeluaran getPengeluaranById(int id);
 
     List<Pengeluaran> getPengeluaran(Integer start, Integer limit);
 

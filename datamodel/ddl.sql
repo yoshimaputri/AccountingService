@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 06, 2019 at 10:43 AM
+-- Generation Time: May 10, 2019 at 05:42 PM
 -- Server version: 10.3.14-MariaDB
 -- PHP Version: 7.3.4
 
@@ -22,6 +22,24 @@ SET time_zone = "+00:00";
 -- Database: `accounting_db`
 --
 
+DELIMITER $$
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `insert_pendapatan` (`tgl` DATE, `jumlah` BIGINT) RETURNS INT(11) BEGIN
+INSERT INTO pendapatan(pend_tgl, pend_jumlah) VALUES (tgl, jumlah);
+RETURN LAST_INSERT_ID();
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `insert_pengeluaran` (`tgl` DATE, `description` VARCHAR(200), `jumlah` BIGINT) RETURNS INT(11) NO SQL
+    DETERMINISTIC
+BEGIN
+INSERT INTO pengeluaran(peng_tgl, peng_desc, peng_jumlah) VALUES (tgl, description, jumlah);
+RETURN LAST_INSERT_ID();
+END$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -33,8 +51,6 @@ CREATE TABLE `pendapatan` (
   `pend_tgl` date NOT NULL,
   `pend_jumlah` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `pengeluaran`
@@ -71,13 +87,13 @@ ALTER TABLE `pengeluaran`
 -- AUTO_INCREMENT for table `pendapatan`
 --
 ALTER TABLE `pendapatan`
-  MODIFY `pend_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pend_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `peng_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `peng_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -7,7 +7,9 @@ import java.util.List;
 public interface PendapatanService {
     Pendapatan newPendapatan(Pendapatan partialValue);
 
-    Pendapatan updatePendapatan(Pendapatan partialValue);
+    Pendapatan updatePendapatan(int idPendapatan, Pendapatan partialValue);
+
+    Pendapatan getPendapatanById(int id);
 
     List<Pendapatan> getPendapatan(Integer start, Integer limit);
 
