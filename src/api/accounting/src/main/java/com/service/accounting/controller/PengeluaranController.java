@@ -38,7 +38,7 @@ public class PengeluaranController {
             // Lebih simple membaca header pakai @RequestHeader.
             // Parameter required masih false karena spek token masih belum turun.
             @RequestHeader(name = "token", required = false) String token,
-            @ModelAttribute Pengeluaran pengeluaran
+            @RequestBody Pengeluaran pengeluaran
     ) {
         try {
             InputValidator.validateInputData(pengeluaran, true);
@@ -56,7 +56,7 @@ public class PengeluaranController {
     public String changePengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idPengeluaran,
-            @ModelAttribute Pengeluaran pengeluaran
+            @RequestBody Pengeluaran pengeluaran
     ) {
         try {
             pengeluaran.setIdPengeluaran(idPengeluaran);

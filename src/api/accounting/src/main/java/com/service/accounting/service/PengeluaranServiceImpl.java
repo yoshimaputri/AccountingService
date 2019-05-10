@@ -46,15 +46,15 @@ public class PengeluaranServiceImpl implements PengeluaranService {
     @Override
     public Pengeluaran updatePengeluaran(Pengeluaran partialValue) {
         if (partialValue.getTanggal() != null) {
-            jdbcTemplate.update("UPDATE pengeluaran SET peng_tgl=? WHERE peng_id=?",
+            jdbcTemplate.update("UPDATE pengeluaran SET peng_tgl=? WHERE peng_id=?", 
                     partialValue.getTanggal(), partialValue.getIdPengeluaran());
         }
         if (partialValue.getJumlah() != null) {
-            jdbcTemplate.update("UPDATE pengeluaran SET peng_jumlah=? WHERE peng_id=?",
+            jdbcTemplate.update("UPDATE pengeluaran SET peng_jumlah=? WHERE peng_id=?", 
                     partialValue.getJumlah(), partialValue.getIdPengeluaran());
         }
         if (partialValue.getKeterangan() != null) {
-            jdbcTemplate.update("UPDATE pengeluaran SET peng_desc=? WHERE peng_id=?",
+            jdbcTemplate.update("UPDATE pengeluaran SET peng_desc=? WHERE peng_id=?", 
                     partialValue.getKeterangan(), partialValue.getIdPengeluaran());
         }
         return getPengeluaranById(partialValue.getIdPengeluaran());

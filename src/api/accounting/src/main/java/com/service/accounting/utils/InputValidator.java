@@ -81,7 +81,7 @@ public class InputValidator {
             checkValidDate(partialValue.getTanggal());
             checkValidKeterangan(partialValue.getKeterangan());
         } else {
-            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null
+            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null 
                     && partialValue.getKeterangan() == null) {
                 throw new InputFormatException("At least 1 field must contains value");
             }

@@ -31,7 +31,7 @@ public class PendapatanController {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String newPendapatan(
             @RequestHeader(name = "token", required = false) String token,
-            @ModelAttribute Pendapatan pendapatan
+            @RequestBody Pendapatan pendapatan
     ) {
         InputValidator.validateInputData(pendapatan, true);
         Pendapatan result = pendapatanService.newPendapatan(pendapatan);
@@ -49,7 +49,7 @@ public class PendapatanController {
     public String editPendapatan(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idPendapatan,
-            @ModelAttribute Pendapatan pendapatan
+            @RequestBody Pendapatan pendapatan
     ) {
         try {
             pendapatan.setIdPendapatan(idPendapatan);
