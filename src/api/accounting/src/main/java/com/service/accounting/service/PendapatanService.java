@@ -11,7 +11,7 @@ public interface PendapatanService {
 
     Pendapatan getPendapatanById(int id);
 
-    List<Pendapatan> getPendapatan(Integer start, Integer limit);
+    List<Pendapatan> getPendapatan(String idRestaurant, Integer start, Integer limit);
 
     Integer getNumberOfPendapatan();
 

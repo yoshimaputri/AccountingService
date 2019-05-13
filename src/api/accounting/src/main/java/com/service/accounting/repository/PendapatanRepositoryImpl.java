@@ -55,6 +55,12 @@ public class PendapatanRepositoryImpl implements PendapatanRepository {
     }
 
     @Override
+    public List<Pendapatan> getByRestaurant(String idRestaurant, Integer start, Integer limit) {
+        return jdbcTemplate.query("SELECT * FROM pengeluaran WHERE resto_id=? ORDER BY peng_id LIMIT ?, ?",
+                new PendapatanMapper(), idRestaurant, start, limit);
+    }
+
+    @Override
     public List<Pendapatan> getByPeriod(String year) {
         String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=?";
         return jdbcTemplate.query(sql, new Object[]{ year }, new PendapatanMapper());

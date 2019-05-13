@@ -46,28 +46,51 @@ public class PendapatanServiceImpl implements PendapatanService {
     }
 
     @Override
-    public List<Pendapatan> getPendapatan(Integer start, Integer limit) {
-        if (start != null) {
-            start--;
-            if (start < 0) {
-                throw new InputFormatException("Start value must greater than 0.");
-            }
-            if (limit != null) {
-                if (limit < 1) {
-                    throw new InputFormatException("Limit value must greater than 0.");
+    public List<Pendapatan> getPendapatan(String idRestaurant, Integer start, Integer limit) {
+        if (idRestaurant != null) {
+            if (start != null) {
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    return repository.getByRestaurant(idRestaurant, start, limit);
+                } else {
+                    return repository.getByRestaurant(idRestaurant, start, 30);
                 }
-                return repository.get(start, limit);
             } else {
-                return repository.get(start, 30);
-            }
-        } else {
-            if (limit != null) {
-                if (limit < 1) {
-                    throw new InputFormatException("Limit value must greater than 0.");
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    return repository.getByRestaurant(idRestaurant, 0, limit);
+                } else {
+                    return repository.getByRestaurant(idRestaurant, 0, 300);
                 }
-                return repository.get(0, limit);
+            }
+        }
+        else {
+            if (start != null) {
+                start--;
+                if (start < 0) {
+                    throw new InputFormatException("Start value must greater than 0.");
+                }
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    return repository.get(start, limit);
+                } else {
+                    return repository.get(start, 30);
+                }
             } else {
-                return repository.get(0, 300);
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    return repository.get(0, limit);
+                } else {
+                    return repository.get(0, 300);
+                }
             }
         }
     }

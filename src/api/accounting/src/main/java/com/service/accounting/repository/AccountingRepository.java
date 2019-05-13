@@ -11,6 +11,8 @@ public interface AccountingRepository<T> {
 
     List<T> get(Integer start, Integer limit);
 
+    List<T> getByRestaurant(String idRestaurant, Integer start, Integer limit);
+
     List<T> getByPeriod(String year);
 
     List<T> getByPeriod(String year, String month);

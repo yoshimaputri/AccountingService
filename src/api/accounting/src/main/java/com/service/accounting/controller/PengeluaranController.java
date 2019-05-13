@@ -73,12 +73,13 @@ public class PengeluaranController {
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
+            @RequestParam(name = "id", required = false) String idRestaurant,
             @RequestParam(name = "start", required = false) Integer start,
             @RequestParam(name = "limit", required = false) Integer limit,
             HttpServletResponse response
     ) {
         response.addHeader("X-Total-Count", pengeluaranService.getNumberOfPengeluaran().toString());
-        List<Pengeluaran> result = pengeluaranService.getPengeluaran(start, limit);
+        List<Pengeluaran> result = pengeluaranService.getPengeluaran(idRestaurant, start, limit);
         try {
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
