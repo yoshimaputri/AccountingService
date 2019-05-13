@@ -2,6 +2,7 @@ package com.service.accounting.model;
 
 public class Pendapatan {
     private Integer idPendapatan;
+    private String idRestaurant;
     private String tanggal;
     private Long jumlah;
 
@@ -15,6 +16,14 @@ public class Pendapatan {
 
     public String getTanggal() {
         return tanggal;
+    }
+
+    public String getIdRestaurant() {
+        return idRestaurant;
+    }
+
+    public void setIdRestaurant(String idRestaurant) {
+        this.idRestaurant = idRestaurant;
     }
 
     public void setTanggal(String tanggal) {

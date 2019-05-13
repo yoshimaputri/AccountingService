@@ -38,9 +38,10 @@ public class PengeluaranController {
             // Lebih simple membaca header pakai @RequestHeader.
             // Parameter required masih false karena spek token masih belum turun.
             @RequestHeader(name = "token", required = false) String token,
-            @RequestBody Pengeluaran pengeluaran
+            @RequestBody String input
     ) {
         try {
+            Pengeluaran pengeluaran = mapper.readValue(input, Pengeluaran.class);
             InputValidator.validateInputData(pengeluaran, true);
             Pengeluaran result = pengeluaranService.newPengeluaran(pengeluaran);
             return mapper.writeValueAsString(result);
@@ -56,9 +57,10 @@ public class PengeluaranController {
     public String changePengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idPengeluaran,
-            @RequestBody Pengeluaran pengeluaran
+            @RequestBody String input
     ) {
         try {
+            Pengeluaran pengeluaran = mapper.readValue(input, Pengeluaran.class);
             InputValidator.validateInputData(pengeluaran, false);
             Pengeluaran result = pengeluaranService.updatePengeluaran(idPengeluaran, pengeluaran);
             return mapper.writeValueAsString(result);

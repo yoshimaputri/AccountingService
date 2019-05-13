@@ -10,8 +10,9 @@ public class PendapatanMapper implements RowMapper<Pendapatan> {
     public Pendapatan mapRow(ResultSet rs, int rowNum) throws SQLException {
         Pendapatan pendapatan = new Pendapatan();
         pendapatan.setIdPendapatan(rs.getInt(1));
-        pendapatan.setTanggal(rs.getString(2));
-        pendapatan.setJumlah(rs.getLong(3));
+        pendapatan.setIdRestaurant(rs.getString(2));
+        pendapatan.setTanggal(rs.getString(3));
+        pendapatan.setJumlah(rs.getLong(4));
 
         return pendapatan;
     }

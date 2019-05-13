@@ -5,6 +5,7 @@ package com.service.accounting.model;
  */
 public class Pengeluaran {
     private Integer idPengeluaran;
+    private String idRestaurant;
     private String tanggal;
     private String keterangan;
     private Long jumlah;
@@ -15,6 +16,14 @@ public class Pengeluaran {
 
     public void setIdPengeluaran(Integer idPengeluaran) {
         this.idPengeluaran = idPengeluaran;
+    }
+
+    public String getIdRestaurant() {
+        return idRestaurant;
+    }
+
+    public void setIdRestaurant(String idRestaurant) {
+        this.idRestaurant = idRestaurant;
     }
 
     public String getTanggal() {

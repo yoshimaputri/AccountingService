@@ -23,8 +23,8 @@ public class PengeluaranRepositoryImpl implements PengeluaranRepository {
 
     @Override
     public Pengeluaran save(Pengeluaran data) {
-        Integer id = jdbcTemplate.queryForObject("SELECT insert_pengeluaran(?, ?, ?)",
-                new Object[]{ data.getTanggal(), data.getKeterangan(), data.getJumlah() },
+        Integer id = jdbcTemplate.queryForObject("SELECT insert_pengeluaran(?, ?, ?, ?)",
+                new Object[]{ data.getIdRestaurant(), data.getTanggal(), data.getKeterangan(), data.getJumlah() },
                 (rs, i) -> rs.getInt(1));
         return get(id);
     }

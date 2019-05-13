@@ -23,8 +23,9 @@ public class PendapatanRepositoryImpl implements PendapatanRepository {
 
     @Override
     public Pendapatan save(Pendapatan data) {
-        Integer id = jdbcTemplate.queryForObject("SELECT insert_pendapatan(?, ?)",
-                new Object[]{ data.getTanggal(), data.getJumlah() }, (rs, i) -> rs.getInt(1));
+        Integer id = jdbcTemplate.queryForObject("SELECT insert_pendapatan(?, ?, ?)",
+                new Object[]{ data.getIdRestaurant(), data.getTanggal(), data.getJumlah() },
+                (rs, i) -> rs.getInt(1));
         return get(id);
     }
 

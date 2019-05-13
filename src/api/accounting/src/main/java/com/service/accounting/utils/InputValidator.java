@@ -48,18 +48,35 @@ public class InputValidator {
         }
     }
 
+    private static void checkValidIdRestaurant(String idRestaurant) {
+        if (idRestaurant.isEmpty()) {
+            throw new InputFormatException("Field 'id_restaurant' cannot be null or empty");
+        }
+        if (idRestaurant.length() > 4) {
+            throw new InputFormatException("Field 'id_restaurant' exceeds maximum length (4 characters)");
+        }
+    }
+
     public static void validateInputData(Pendapatan partialValue, boolean insertMode) {
         if (insertMode) {
-            if (partialValue.getJumlah() == null) {
-                throw new InputFormatException("Field 'jumlah' cannot be null or empty");
+            if (partialValue.getIdRestaurant() == null) {
+                throw new InputFormatException("Field 'id_restaurant' cannot be null or empty");
             }
             if (partialValue.getTanggal() == null) {
                 throw new InputFormatException("Field 'tanggal' cannot be null or empty");
             }
+            if (partialValue.getJumlah() == null) {
+                throw new InputFormatException("Field 'jumlah' cannot be null or empty");
+            }
+            checkValidIdRestaurant(partialValue.getIdRestaurant());
             checkValidDate(partialValue.getTanggal());
         } else {
-            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null) {
+            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null
+                    && partialValue.getIdRestaurant() == null) {
                 throw new InputFormatException("At least 1 field must contains value");
+            }
+            if (partialValue.getIdRestaurant() != null) {
+                checkValidIdRestaurant(partialValue.getIdRestaurant());
             }
             if (partialValue.getTanggal() != null) {
                 checkValidDate(partialValue.getTanggal());
@@ -69,6 +86,9 @@ public class InputValidator {
 
     public static void validateInputData(Pengeluaran partialValue, boolean insertMode) {
         if (insertMode) {
+            if (partialValue.getIdRestaurant() == null) {
+                throw new InputFormatException("Field 'id_restaurant' cannot be null or empty");
+            }
             if (partialValue.getJumlah() == null) {
                 throw new InputFormatException("Field 'jumlah' cannot be null or empty");
             }
@@ -78,12 +98,16 @@ public class InputValidator {
             if (partialValue.getKeterangan() == null) {
                 throw new InputFormatException("Field 'keterangan' cannot be null or empty");
             }
+            checkValidIdRestaurant(partialValue.getIdRestaurant());
             checkValidDate(partialValue.getTanggal());
             checkValidKeterangan(partialValue.getKeterangan());
         } else {
             if (partialValue.getTanggal() == null && partialValue.getJumlah() == null 
-                    && partialValue.getKeterangan() == null) {
+                    && partialValue.getKeterangan() == null  && partialValue.getIdRestaurant() == null) {
                 throw new InputFormatException("At least 1 field must contains value");
+            }
+            if (partialValue.getIdRestaurant() != null) {
+                checkValidIdRestaurant(partialValue.getIdRestaurant());
             }
             if (partialValue.getTanggal() != null) {
                 checkValidDate(partialValue.getTanggal());
