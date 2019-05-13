@@ -60,7 +60,7 @@ public class PengeluaranController {
     ) {
         try {
             InputValidator.validateInputData(pengeluaran, false);
-            Pengeluaran result = pengeluaranService.updatePengeluaran(idPengeluaran, pengeluaran);
+            Pengeluaran result = pengeluaranService.updatePengeluaran(pengeluaran);
             return mapper.writeValueAsString(result);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());

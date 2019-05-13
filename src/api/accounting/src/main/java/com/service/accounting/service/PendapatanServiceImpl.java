@@ -20,70 +20,35 @@ public class PendapatanServiceImpl implements PendapatanService {
 
     @Override
     public Pendapatan newPendapatan(Pendapatan partialValue) {
-        return repository.save(partialValue);
+        return null;
     }
 
     public Pendapatan getPendapatanById(int id) {
-        return repository.get(id);
+        return null;
     }
 
     @Override
     public Pendapatan updatePendapatan(int idPendapatan, Pendapatan partialValue) {
-        Pendapatan pendapatan = repository.get(idPendapatan);
-        if (pendapatan != null) {
-            if (partialValue.getTanggal() != null) {
-                pendapatan.setTanggal(partialValue.getTanggal());
-            }
-            if (partialValue.getJumlah() != null) {
-                pendapatan.setJumlah(partialValue.getJumlah());
-            }
-
-            return repository.update(pendapatan);
-        }
-        else {
-            throw new NotFoundException("Pendapatan", idPendapatan);
-        }
+        return null;
     }
 
     @Override
     public List<Pendapatan> getPendapatan(Integer start, Integer limit) {
-        if (start != null) {
-            start--;
-            if (start < 0) {
-                throw new InputFormatException("Start value must greater than 0.");
-            }
-            if (limit != null) {
-                if (limit < 1) {
-                    throw new InputFormatException("Limit value must greater than 0.");
-                }
-                return repository.get(start, limit);
-            } else {
-                return repository.get(start, 30);
-            }
-        } else {
-            if (limit != null) {
-                if (limit < 1) {
-                    throw new InputFormatException("Limit value must greater than 0.");
-                }
-                return repository.get(0, limit);
-            } else {
-                return repository.get(0, 300);
-            }
-        }
+        return null;
     }
 
     @Override
     public Integer getNumberOfPendapatan() {
-        return repository.count();
+        return null;
     }
 
     @Override
     public List<Pendapatan> getPendapatanByPeriod(String tahun) {
-        return repository.getByPeriod(tahun);
+        return null;
     }
 
     @Override
     public List<Pendapatan> getPendapatanByPeriod(String tahun, String bulan) {
-        return repository.getByPeriod(tahun, bulan);
+        return null;
     }
 }
