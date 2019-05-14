@@ -5,15 +5,15 @@ import com.service.accounting.model.Pendapatan;
 import java.util.List;
 
 public interface PendapatanService {
-    Pendapatan newPendapatan(Pendapatan partialValue);
+    Pendapatan newPendapatan(Pendapatan pendapatan);
 
-    Pendapatan updatePendapatan(int idPendapatan, Pendapatan partialValue);
+    Pendapatan updatePendapatan(Pendapatan pendapatan);
 
     Pendapatan getPendapatanById(int id);
 
-    List<Pendapatan> getPendapatan(Integer start, Integer limit);
+    List<Pendapatan> getPendapatan(String idRestaurant, Integer start, Integer limit);
 
-    Integer getNumberOfPendapatan();
+    Long getNumberOfPendapatan();
 
     List<Pendapatan> getPendapatanByPeriod(String tahun);
 

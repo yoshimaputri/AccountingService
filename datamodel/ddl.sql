@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 10, 2019 at 05:42 PM
+-- Generation Time: May 14, 2019 at 08:59 AM
 -- Server version: 10.3.14-MariaDB
--- PHP Version: 7.3.4
+-- PHP Version: 7.3.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,38 +19,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `accounting_db`
+-- Database: `accounting_v2`
 --
-
-DELIMITER $$
---
--- Functions
---
-CREATE DEFINER=`root`@`localhost` FUNCTION `insert_pendapatan` (`tgl` DATE, `jumlah` BIGINT) RETURNS INT(11) BEGIN
-INSERT INTO pendapatan(pend_tgl, pend_jumlah) VALUES (tgl, jumlah);
-RETURN LAST_INSERT_ID();
-END$$
-
-CREATE DEFINER=`root`@`localhost` FUNCTION `insert_pengeluaran` (`tgl` DATE, `description` VARCHAR(200), `jumlah` BIGINT) RETURNS INT(11) NO SQL
-    DETERMINISTIC
-BEGIN
-INSERT INTO pengeluaran(peng_tgl, peng_desc, peng_jumlah) VALUES (tgl, description, jumlah);
-RETURN LAST_INSERT_ID();
-END$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `pendapatan`
---
-
-CREATE TABLE `pendapatan` (
-  `pend_id` int(11) NOT NULL,
-  `pend_tgl` date NOT NULL,
-  `pend_jumlah` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `pengeluaran`
@@ -58,20 +30,23 @@ CREATE TABLE `pendapatan` (
 
 CREATE TABLE `pengeluaran` (
   `peng_id` int(11) NOT NULL,
+  `resto_id` char(4) COLLATE utf8mb4_unicode_ci NOT NULL,
   `peng_tgl` date NOT NULL,
   `peng_desc` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `peng_jumlah` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Indexes for dumped tables
+-- Dumping data for table `pengeluaran`
 --
 
+INSERT INTO `pengeluaran` (`peng_id`, `resto_id`, `peng_tgl`, `peng_desc`, `peng_jumlah`) VALUES
+(1, 'R034', '2018-12-28', 'beli daging sapi untuk tahun baru', 12000000),
+(2, 'R021', '2018-12-29', 'beli daging ayam untuk tahun baru', 8000000);
+
 --
--- Indexes for table `pendapatan`
+-- Indexes for dumped tables
 --
-ALTER TABLE `pendapatan`
-  ADD PRIMARY KEY (`pend_id`);
 
 --
 -- Indexes for table `pengeluaran`
@@ -84,16 +59,10 @@ ALTER TABLE `pengeluaran`
 --
 
 --
--- AUTO_INCREMENT for table `pendapatan`
---
-ALTER TABLE `pendapatan`
-  MODIFY `pend_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `peng_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `peng_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -14,9 +14,9 @@ public interface PengeluaranService {
 
     Pengeluaran getPengeluaranById(int id);
 
-    List<Pengeluaran> getPengeluaran(Integer start, Integer limit);
+    List<Pengeluaran> getPengeluaran(String idRestaurant, Integer start, Integer limit);
 
-    Integer getNumberOfPengeluaran();
+    Long getNumberOfPengeluaran();
 
     List<Pengeluaran> getPengeluaranByPeriod(String tahun);
 
