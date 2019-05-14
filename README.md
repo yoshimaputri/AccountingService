@@ -16,8 +16,8 @@ Sistem Informasi Accounting Restoran.
 - [x] Testing
 
 ## Revision Checklist
-- [ ] Datamodel
-- [ ] Implementation
+- [x] Datamodel
+- [x] Implementation
 - [ ] Documentation
 - [ ] Testing
 
@@ -31,6 +31,8 @@ https://app.swaggerhub.com/apis-docs/yoshimaputri/swagger-accounting/1.0.0
 These endpoints consumes JSON and produces JSON. Form-data version has been deprecated and we will focus on JSON-version only.
 
 ```
+Base URL: https://ojoakua.site/accounting
+
 POST /pendapatan
 POST /pengeluaran
 
