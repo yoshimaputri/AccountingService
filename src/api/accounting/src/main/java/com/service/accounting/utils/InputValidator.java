@@ -62,17 +62,21 @@ public class InputValidator {
             if (partialValue.getIdRestaurant() == null) {
                 throw new InputFormatException("Field 'id_restaurant' cannot be null or empty");
             }
-            if (partialValue.getTanggal() == null) {
-                throw new InputFormatException("Field 'tanggal' cannot be null or empty");
-            }
             if (partialValue.getJumlah() == null) {
                 throw new InputFormatException("Field 'jumlah' cannot be null or empty");
             }
+            if (partialValue.getTanggal() == null) {
+                throw new InputFormatException("Field 'tanggal' cannot be null or empty");
+            }
+            if (partialValue.getKeterangan() == null) {
+                throw new InputFormatException("Field 'keterangan' cannot be null or empty");
+            }
             checkValidIdRestaurant(partialValue.getIdRestaurant());
             checkValidDate(partialValue.getTanggal());
+            checkValidKeterangan(partialValue.getKeterangan());
         } else {
             if (partialValue.getTanggal() == null && partialValue.getJumlah() == null
-                    && partialValue.getIdRestaurant() == null) {
+                    && partialValue.getKeterangan() == null  && partialValue.getIdRestaurant() == null) {
                 throw new InputFormatException("At least 1 field must contains value");
             }
             if (partialValue.getIdRestaurant() != null) {
@@ -80,6 +84,9 @@ public class InputValidator {
             }
             if (partialValue.getTanggal() != null) {
                 checkValidDate(partialValue.getTanggal());
+            }
+            if (partialValue.getKeterangan() != null) {
+                checkValidKeterangan(partialValue.getKeterangan());
             }
         }
     }
@@ -102,7 +109,7 @@ public class InputValidator {
             checkValidDate(partialValue.getTanggal());
             checkValidKeterangan(partialValue.getKeterangan());
         } else {
-            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null 
+            if (partialValue.getTanggal() == null && partialValue.getJumlah() == null
                     && partialValue.getKeterangan() == null  && partialValue.getIdRestaurant() == null) {
                 throw new InputFormatException("At least 1 field must contains value");
             }

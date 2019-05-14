@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implementasi dari interface PengeluaranService
@@ -22,32 +24,34 @@ public class PengeluaranServiceImpl implements PengeluaranService {
     }
 
     @Override
-    public Pengeluaran newPengeluaran(Pengeluaran partialValue) {
-        return repository.save(partialValue);
+    public Pengeluaran newPengeluaran(Pengeluaran pengeluaran) {
+        return repository.save(pengeluaran);
     }
 
     @Override
     public Pengeluaran getPengeluaranById(int id) {
-        return repository.get(id);
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("peng_id", id));
     }
 
     @Override
-    public Pengeluaran updatePengeluaran(int idPengeluaran, Pengeluaran partialValue) {
-        Pengeluaran pengeluaran = repository.get(idPengeluaran);
-        if (pengeluaran != null) {
-            if (partialValue.getTanggal() != null) {
-                pengeluaran.setTanggal(partialValue.getTanggal());
+    public Pengeluaran updatePengeluaran(Pengeluaran pengeluaran) {
+        Pengeluaran check = getPengeluaranById(pengeluaran.getIdPengeluaran());
+        if (check != null) {
+            if (pengeluaran.getTanggal() != null) {
+                check.setTanggal(pengeluaran.getTanggal());
             }
-            if (partialValue.getKeterangan() != null) {
-                pengeluaran.setKeterangan(partialValue.getKeterangan());
+            if (pengeluaran.getIdRestaurant() != null) {
+                check.setIdRestaurant(pengeluaran.getIdRestaurant());
             }
-            if (partialValue.getJumlah() != null) {
-                pengeluaran.setJumlah(partialValue.getJumlah());
+            if (pengeluaran.getKeterangan() != null) {
+                check.setKeterangan(pengeluaran.getKeterangan());
             }
-
-            return repository.update(pengeluaran);
+            if (pengeluaran.getJumlah() != null) {
+                check.setJumlah(pengeluaran.getJumlah());
+            }
+            return repository.save(check);
         } else {
-            throw new NotFoundException("Pengeluaran", idPengeluaran);
+            throw new NotFoundException("peng_id", pengeluaran.getIdPengeluaran());
         }
     }
 
@@ -55,22 +59,52 @@ public class PengeluaranServiceImpl implements PengeluaranService {
     public List<Pengeluaran> getPengeluaran(String idRestaurant, Integer start, Integer limit) {
         if (idRestaurant != null) {
             if (start != null) {
+                if (start < 0) {
+                    throw new InputFormatException("Start value must greater than or equal 0.");
+                }
+                if (start > repository.count()) {
+                    throw new InputFormatException("Start value greater than the number of data we have.");
+                }
                 if (limit != null) {
                     if (limit < 1) {
                         throw new InputFormatException("Limit value must greater than 0.");
                     }
-                    return repository.getByRestaurant(idRestaurant, start, limit);
+                    // start, limit
+                    List<Pengeluaran> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if ((result.size() - start) < limit) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + limit);
+                    }
                 } else {
-                    return repository.getByRestaurant(idRestaurant, start, 30);
+                    // start, 300
+                    List<Pengeluaran> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if ((result.size() - start) < 300) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + 300);
+                    }
                 }
             } else {
                 if (limit != null) {
                     if (limit < 1) {
                         throw new InputFormatException("Limit value must greater than 0.");
                     }
-                    return repository.getByRestaurant(idRestaurant, 0, limit);
+                    // 0, limit
+                    List<Pengeluaran> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if (result.size() < limit) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, limit);
+                    }
                 } else {
-                    return repository.getByRestaurant(idRestaurant, 0, 300);
+                    // 0, 300
+                    List<Pengeluaran> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if (result.size() < 300) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, 300);
+                    }
                 }
             }
         }
@@ -80,39 +114,68 @@ public class PengeluaranServiceImpl implements PengeluaranService {
                 if (start < 0) {
                     throw new InputFormatException("Start value must greater than 0.");
                 }
+                if (start > repository.count() - 1) {
+                    throw new InputFormatException("Start value greater than the number of data we have.");
+                }
                 if (limit != null) {
                     if (limit < 1) {
                         throw new InputFormatException("Limit value must greater than 0.");
                     }
-                    return repository.get(start, limit);
+                    List<Pengeluaran> result = repository.findAll();
+                    if ((result.size() - start) < limit) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + limit);
+                    }
                 } else {
-                    return repository.get(start, 30);
+                    List<Pengeluaran> result = repository.findAll();
+                    if ((result.size() - start) < 300) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + 300);
+                    }
                 }
             } else {
                 if (limit != null) {
                     if (limit < 1) {
                         throw new InputFormatException("Limit value must greater than 0.");
                     }
-                    return repository.get(0, limit);
+                    List<Pengeluaran> result = repository.findAll();
+                    if (result.size() < limit) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, limit);
+                    }
                 } else {
-                    return repository.get(0, 300);
+                    List<Pengeluaran> result = repository.findAll();
+                    if (result.size() < 300) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, 300);
+                    }
                 }
             }
         }
     }
 
     @Override
-    public Integer getNumberOfPengeluaran() {
+    public Long getNumberOfPengeluaran() {
         return repository.count();
     }
 
     @Override
     public List<Pengeluaran> getPengeluaranByPeriod(String tahun) {
-        return repository.getByPeriod(tahun);
+        Stream<Pengeluaran> stream = repository.findAll().stream();
+        return stream.filter(pendapatan -> pendapatan.getTanggal().split("-")[0].equals(tahun))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Pengeluaran> getPengeluaranByPeriod(String tahun, String bulan) {
-        return repository.getByPeriod(tahun, bulan);
+        Stream<Pengeluaran> stream = repository.findAll().stream();
+        return stream.filter(pendapatan -> {
+            String[] dateToken = pendapatan.getTanggal().split("-");
+            return dateToken[0].equals(tahun) && dateToken[1].equals(bulan);
+        }).collect(Collectors.toList());
     }
 }

@@ -10,13 +10,13 @@ import java.util.List;
 public interface PengeluaranService {
     Pengeluaran newPengeluaran(Pengeluaran partialValue);
 
-    Pengeluaran updatePengeluaran(int idPengeluaran, Pengeluaran partialValue);
+    Pengeluaran updatePengeluaran(Pengeluaran pengeluaran);
 
     Pengeluaran getPengeluaranById(int id);
 
     List<Pengeluaran> getPengeluaran(String idRestaurant, Integer start, Integer limit);
 
-    Integer getNumberOfPengeluaran();
+    Long getNumberOfPengeluaran();
 
     List<Pengeluaran> getPengeluaranByPeriod(String tahun);
 
