@@ -78,8 +78,8 @@
 				<h3 style="text-align: left;">Method:</h3>
 				<div class="form-group">
 					<select class="form-control" name="method">
-						<!-- <option value="GET">GET</option> -->
-						<option value="POST">POST</option>
+						<option value="GET">GET</option>
+						<!-- <option value="POST">POST</option> -->
 						<!-- <option value="PATCH">PATCH</option>
 						<option value="PUT">PUT</option> -->
 					</select>
@@ -96,22 +96,27 @@
 			</div>
 		</div>
 		<div class="row" style="text-align: center; width: 100%; margin:50px;">
-			<div class="col-sm-5" style="margin: 10px; width: 100%;">
-				<h3 style="text-align: left;">ID Restauran:</h3>
-				<input class="form-control" type="text" name="id_restaurant">
+			<div class="col-sm-5" style="margin: 10px;">
+				<h3 style="text-align: left;">Berdasarkan:</h3>
+				<div class="form-group">
+					<select class="form-control" name="based">
+						<option value="idres">ID Restauran</option>
+						<option value="tahun">Tahun</option>
+					</select>
+				</div>
 			</div>
-			<div class="col-sm-5" style="margin: 10px; width: 100%;">
-				<h3 style="text-align: left;">Tanggal:</h3>
-				<input class="form-control" type="date" name="tanggal">
+			<div class="col-sm-5" style="margin: 10px; width: 100%; display: none;">
+				<h3 style="text-align: left;">Limit Data:</h3>
+				<input class="form-control" type="text" name="limit">
 			</div>
 		</div>
-		<div class="row" style="text-align: center; width: 100%; margin:50px;">
+		<div class="row" style="text-align: center; width: 100%; margin:50px; display: none;">
 			<div class="col-sm-5" style="margin: 10px; width: 100%;">
-				<h3 style="text-align: left;">Jumlah:</h3>
+				<h3 style="text-align: left;">Tahun:</h3>
 				<input class="form-control" type="text" name="jumlah">
 			</div>
 			<div class="col-sm-5" style="margin: 10px; width: 100%;">
-				<h3 style="text-align: left;">Keterangan:</h3>
+				<h3 style="text-align: left;">Bulan (optional):</h3>
 				<input class="form-control" type="text" name="keterangan">
 			</div>
 		</div>
