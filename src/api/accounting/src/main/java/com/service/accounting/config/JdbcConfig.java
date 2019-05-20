@@ -18,8 +18,8 @@ public class JdbcConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/accounting_db");
-        dataSource.setUsername("dbusername");
-        dataSource.setPassword("dbpassword");
+        dataSource.setUsername("root");
+        dataSource.setPassword("");
 
         return dataSource;
     }
