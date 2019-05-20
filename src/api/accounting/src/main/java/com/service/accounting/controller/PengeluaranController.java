@@ -1,7 +1,5 @@
 package com.service.accounting.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.service.accounting.exception.NotAllowedException;
 import com.service.accounting.model.Pengeluaran;
 import com.service.accounting.service.PengeluaranService;
@@ -12,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,7 +19,6 @@ import java.util.List;
 @RequestMapping("/pengeluaran")
 public class PengeluaranController {
     private PengeluaranService pengeluaranService;
-    private ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
     // Setter injection lebih di-recommend oleh spring daripada field injection
     @Autowired
@@ -34,87 +30,63 @@ public class PengeluaranController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String addPengeluaran(
+    public Pengeluaran addPengeluaran(
             // Lebih simple membaca header pakai @RequestHeader.
             // Parameter required masih false karena spek token masih belum turun.
             @RequestHeader(name = "token", required = false) String token,
             @RequestBody Pengeluaran pengeluaran
     ) {
-        try {
-            InputValidator.validateInputData(pengeluaran, true);
-            Pengeluaran result = pengeluaranService.newPengeluaran(pengeluaran);
-            return mapper.writeValueAsString(result);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        InputValidator.validateInputData(pengeluaran, true);
+        return pengeluaranService.newPengeluaran(pengeluaran);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH },
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String changePengeluaran(
+    public Pengeluaran changePengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("id") int idPengeluaran,
             @RequestBody Pengeluaran pengeluaran
     ) {
-        try {
-            pengeluaran.setIdPengeluaran(idPengeluaran);
-            InputValidator.validateInputData(pengeluaran, false);
-            Pengeluaran result = pengeluaranService.updatePengeluaran(pengeluaran);
-            return mapper.writeValueAsString(result);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        InputValidator.validateInputData(pengeluaran, false);
+        pengeluaran.setIdPengeluaran(idPengeluaran);
+        return pengeluaranService.updatePengeluaran(pengeluaran);
     }
 
     @ResponseBody
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getPengeluaran(
+    public List<Pengeluaran> getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
+            @RequestParam(name = "idrest", required = false) String idRestaurant,
             @RequestParam(name = "start", required = false) Integer start,
             @RequestParam(name = "limit", required = false) Integer limit,
             HttpServletResponse response
     ) {
         response.addHeader("X-Total-Count", pengeluaranService.getNumberOfPengeluaran().toString());
-        List<Pengeluaran> result = pengeluaranService.getPengeluaran(start, limit);
-        try {
-            return mapper.writeValueAsString(result);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        return pengeluaranService.getPengeluaran(idRestaurant, start, limit);
     }
 
     @ResponseBody
     @RequestMapping(value = "/{tahun}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getPengeluaran(
+    public List<Pengeluaran> getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") String tahun
     ) {
         InputValidator.checkValidPath(tahun, null);
-        List<Pengeluaran> result = pengeluaranService.getPengeluaranByPeriod(tahun);
-        try {
-            return mapper.writeValueAsString(result);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        return pengeluaranService.getPengeluaranByPeriod(tahun);
     }
 
     @ResponseBody
     @RequestMapping(value = "/{tahun}/{bulan}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getPengeluaran(
+    public List<Pengeluaran> getPengeluaran(
             @RequestHeader(name = "token", required = false) String token,
             @PathVariable("tahun") String tahun,
             @PathVariable("bulan") String bulan
     ) {
         InputValidator.checkValidPath(tahun, bulan);
-        List<Pengeluaran> result = pengeluaranService.getPengeluaranByPeriod(tahun, bulan);
-        try {
-            return mapper.writeValueAsString(result);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        return pengeluaranService.getPengeluaranByPeriod(tahun, bulan);
     }
 
     @ResponseBody

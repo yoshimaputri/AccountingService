@@ -1,101 +1,177 @@
 package com.service.accounting.service;
 
 import com.service.accounting.exception.InputFormatException;
+import com.service.accounting.exception.NotFoundException;
 import com.service.accounting.model.Pendapatan;
-import com.service.accounting.model.PendapatanMapper;
+import com.service.accounting.repository.PendapatanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PendapatanServiceImpl implements PendapatanService {
-    private DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
+    private PendapatanRepository repository;
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    public void setRepository(PendapatanRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Pendapatan newPendapatan(Pendapatan partialValue) {
-        String sql = "INSERT INTO pendapatan(pend_tgl, pend_jumlah) VALUES (?, ?)";
-        jdbcTemplate.update(sql, partialValue.getTanggal(), partialValue.getJumlah());
-        return getLatestPendapatan();
+    public Pendapatan newPendapatan(Pendapatan pendapatan) {
+        return repository.save(pendapatan);
     }
 
-    private Pendapatan getLatestPendapatan() {
-        String sql = "SELECT * FROM pendapatan ORDER BY pend_id DESC LIMIT 1";
-        return jdbcTemplate.queryForObject(sql, new PendapatanMapper());
-    }
-
-    private Pendapatan getPendapatanById(int idpendapatan) {
-        String sql = "SELECT * FROM pendapatan WHERE pend_id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{ idpendapatan }, new PendapatanMapper());
+    public Pendapatan getPendapatanById(int id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("peng_id", id));
     }
 
     @Override
-    public Pendapatan updatePendapatan(Pendapatan partialValue) {
-        if (partialValue.getTanggal() != null) {
-            jdbcTemplate.update("UPDATE pendapatan SET pend_tgl=? WHERE pend_id=?", 
-                    partialValue.getTanggal(), partialValue.getIdPendapatan());
-        }
-        if (partialValue.getJumlah() != null) {
-            jdbcTemplate.update("UPDATE pendapatan SET pend_jumlah=? WHERE pend_id=?", 
-                    partialValue.getJumlah(), partialValue.getIdPendapatan());
-        }
-        return getPendapatanById(partialValue.getIdPendapatan());
-    }
-
-    @Override
-    public List<Pendapatan> getPendapatan(Integer start, Integer limit) {
-        if (start != null) {
-            start--;
-            if (start < 0) {
-                throw new InputFormatException("Start value must greater than 0.");
+    public Pendapatan updatePendapatan(Pendapatan pendapatan) {
+        Pendapatan check = getPendapatanById(pendapatan.getIdPendapatan());
+        if (check != null) {
+            if (pendapatan.getTanggal() != null) {
+                check.setTanggal(pendapatan.getTanggal());
             }
-            if (limit != null) {
-                if (limit < 1) {
-                    throw new InputFormatException("Limit value must greater than 0.");
-                }
-                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
-                        new PendapatanMapper(), start, limit);
-            } else {
-                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
-                        new PendapatanMapper(), start, 30);
+            if (pendapatan.getIdRestaurant() != null) {
+                check.setIdRestaurant(pendapatan.getIdRestaurant());
             }
+            if (pendapatan.getKeterangan() != null) {
+                check.setKeterangan(pendapatan.getKeterangan());
+            }
+            if (pendapatan.getJumlah() != null) {
+                check.setJumlah(pendapatan.getJumlah());
+            }
+            return repository.save(check);
         } else {
-            if (limit != null) {
-                if (limit < 1) {
-                    throw new InputFormatException("Limit value must greater than 0.");
+            throw new NotFoundException("pend_id", pendapatan.getIdPendapatan());
+        }
+    }
+
+    @Override
+    public List<Pendapatan> getPendapatan(String idRestaurant, Integer start, Integer limit) {
+        if (idRestaurant != null) {
+            if (start != null) {
+                if (start < 0) {
+                    throw new InputFormatException("Start value must greater than or equal 0.");
                 }
-                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT ?, ?",
-                        new PendapatanMapper(), 0, limit);
+                if (start > repository.count()) {
+                    throw new InputFormatException("Start value greater than the number of data we have.");
+                }
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    // start, limit
+                    List<Pendapatan> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if ((result.size() - start) < limit) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + limit);
+                    }
+                } else {
+                    // start, 300
+                    List<Pendapatan> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if ((result.size() - start) < 300) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + 300);
+                    }
+                }
             } else {
-                return jdbcTemplate.query("SELECT * FROM pendapatan LIMIT 300", new PendapatanMapper());
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    // 0, limit
+                    List<Pendapatan> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if (result.size() < limit) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, limit);
+                    }
+                } else {
+                    // 0, 300
+                    List<Pendapatan> result = repository.findAllByIdRestaurant(idRestaurant);
+                    if (result.size() < 300) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, 300);
+                    }
+                }
+            }
+        }
+        else {
+            if (start != null) {
+                start--;
+                if (start < 0) {
+                    throw new InputFormatException("Start value must greater than 0.");
+                }
+                if (start > repository.count()) {
+                    throw new InputFormatException("Start value greater than the number of data we have.");
+                }
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    List<Pendapatan> result = repository.findAll();
+                    if ((result.size() - start) < limit) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + limit);
+                    }
+                } else {
+                    List<Pendapatan> result = repository.findAll();
+                    if ((result.size() - start) < 300) {
+                        return result.subList(start, result.size());
+                    } else {
+                        return result.subList(start, start + 300);
+                    }
+                }
+            } else {
+                if (limit != null) {
+                    if (limit < 1) {
+                        throw new InputFormatException("Limit value must greater than 0.");
+                    }
+                    List<Pendapatan> result = repository.findAll();
+                    if (result.size() < limit) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, limit);
+                    }
+                } else {
+                    List<Pendapatan> result = repository.findAll();
+                    if (result.size() < 300) {
+                        return result.subList(0, result.size());
+                    } else {
+                        return result.subList(0, 300);
+                    }
+                }
             }
         }
     }
 
     @Override
-    public Integer getNumberOfPendapatan() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM pendapatan",
-                (rs, i) -> rs.getInt(1));
+    public Long getNumberOfPendapatan() {
+        return repository.count();
     }
 
     @Override
     public List<Pendapatan> getPendapatanByPeriod(String tahun) {
-        String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=?";
-        return jdbcTemplate.query(sql, new Object[]{ tahun }, new PendapatanMapper());
+        Stream<Pendapatan> stream = repository.findAll().stream();
+        return stream.filter(pendapatan -> pendapatan.getTanggal().split("-")[0].equals(tahun))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Pendapatan> getPendapatanByPeriod(String tahun, String bulan) {
-        String sql = "SELECT * FROM pendapatan WHERE EXTRACT(YEAR FROM pend_tgl)=? AND EXTRACT(MONTH FROM pend_tgl)=?";
-        return jdbcTemplate.query(sql, new Object[]{ tahun, bulan }, new PendapatanMapper());
+        Stream<Pendapatan> stream = repository.findAll().stream();
+        return stream.filter(pendapatan -> {
+            String[] dateToken = pendapatan.getTanggal().split("-");
+            return dateToken[0].equals(tahun) && dateToken[1].equals(bulan);
+        }).collect(Collectors.toList());
     }
 }
