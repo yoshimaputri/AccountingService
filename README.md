@@ -18,7 +18,7 @@ Sistem Informasi Accounting Restoran.
 ## Revision Checklist
 - [x] Datamodel
 - [x] Implementation
-- [ ] Documentation
+- [x] Documentation
 - [ ] Testing
 
 ## Documentation
