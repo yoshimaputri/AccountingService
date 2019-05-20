@@ -99,31 +99,43 @@
 			<div class="col-sm-5" style="margin: 10px;">
 				<h3 style="text-align: left;">Berdasarkan:</h3>
 				<div class="form-group">
-					<select class="form-control" name="based">
+					<select class="form-control" name="based" onchange="showHide();">
+						<option value="nothing">Tidak Ada</option>
 						<option value="idres">ID Restauran</option>
-						<option value="tahun">Tahun</option>
+						<option value="thn">Tahun</option>
 					</select>
 				</div>
 			</div>
-			<div class="col-sm-5" style="margin: 10px; width: 100%; display: none;">
+			<div id="for_idres" class="col-sm-5" style="margin: 10px; width: 100%; display: none;">
 				<h3 style="text-align: left;">Limit Data:</h3>
 				<input class="form-control" type="text" name="limit">
 			</div>
 		</div>
-		<div class="row" style="text-align: center; width: 100%; margin:50px; display: none;">
-			<div class="col-sm-5" style="margin: 10px; width: 100%;">
+		<div id="for_thn" class="row" style="text-align: center; width: 100%; margin:50px; display: none;">
+			<div class="col-sm-4" style="margin: 10px; ">
 				<h3 style="text-align: left;">Tahun:</h3>
-				<input class="form-control" type="text" name="jumlah">
+				<input class="form-control" type="text" name="tahun">
 			</div>
-			<div class="col-sm-5" style="margin: 10px; width: 100%;">
+			<div class="col-sm-4" style="margin: 10px; ">
 				<h3 style="text-align: left;">Bulan (optional):</h3>
-				<input class="form-control" type="text" name="keterangan">
+				<input class="form-control" type="text" name="bulan">
 			</div>
 		</div>
-		<button style="width: 25%; margin-left: 35%; text-align: center;" type="submit" class="btn btn-primary">Kirim</button>
+		<button style="width: 25%; margin-left: 35%; text-align: center;" type="submit" class="btn btn-primary">Request Data</button>
 	</form>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+		function showHide(){
+			console.log(document.querySelector('[name="based"]').value)
+			if (document.querySelector('[name="based"]').value == 'idres'){
+				document.getElementById('for_idres').style.display = "block";
+				document.getElementById('for_thn').style.display = "none";
+			}
+			else if (document.querySelector('[name="based"]').value == 'thn'){
+				document.getElementById('for_thn').style.display = "block";
+				document.getElementById('for_idres').style.display = "none";
+			}
+		}
 		function actionAPI(){
 			let idRestaurant = document.querySelector('[name="id_restaurant"]').value; // baca dari field id restaurant
 			let tanggal = document.querySelector('[name="tanggal"]').value; // baca dari field tanggal
