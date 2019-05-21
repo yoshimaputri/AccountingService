@@ -34,6 +34,7 @@ public class PendapatanController {
     }
 
     @ResponseBody
+    @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/{id}", method = { RequestMethod.PUT, RequestMethod.PATCH },
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
