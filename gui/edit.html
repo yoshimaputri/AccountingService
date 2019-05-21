@@ -72,13 +72,13 @@
 			</div>
 		</div>
 	</nav>
-	<form style="width: 100%; background-color: #f4f6f7; padding: 10px;" action="" onsubmit="actionAPI();">
+	<div style="width: 100%; background-color: #f4f6f7; padding: 10px;">
 		<div class="row" style="text-align: center; width: 100%; margin:50px;">
 			<div class="col-sm-5" style="margin: 10px;">
 				<h3 style="text-align: left;">Method:</h3>
 				<div class="form-group">
 					<select class="form-control" name="method">
-						<option value="GET">GET</option>
+						<!-- <option value="GET">GET</option> -->
 						<!-- <option value="POST">POST</option> -->
 						<option value="PATCH">PATCH</option>
 						<option value="PUT">PUT</option>
@@ -89,16 +89,16 @@
 				<h3 style="text-align: left;">Data:</h3>
 				<div class="form-group">
 					<select class="form-control" name="jenisdata">
-						<option value="Pendapatan">Pendapatan</option>
-						<option value="Pengeluaran">Pengeluaran</option>
+						<option value="pendapatan">Pendapatan</option>
+						<option value="pengeluaran">Pengeluaran</option>
 					</select>
 				</div>
 			</div>
 		</div>
 		<div class="row" style="text-align: center; width: 100%; margin:50px;">
 			<div class="col-sm-5" style="margin: 10px; width: 100%;">
-				<h3 style="text-align: left;">Edit berdasarkan ID Restauran:</h3>
-				<input class="form-control" type="text" name="id_restaurant">
+				<h3 style="text-align: left;">Edit berdasarkan ID data:</h3>
+				<input class="form-control" type="text" name="id">
 			</div>
 			<div class="col-sm-5" style="margin: 10px; width: 100%;">
 				<h3 style="text-align: left;">Tanggal:</h3>
@@ -115,24 +115,46 @@
 				<input class="form-control" type="text" name="keterangan">
 			</div>
 		</div>
-		<button style="width: 25%; margin-left: 35%; text-align: center;" type="submit" class="btn btn-primary">Kirim</button>
-	</form>
+		<button style="width: 25%; margin-left: 35%; text-align: center;" onclick="editAPI()" class="btn btn-primary">Kirim</button>
+	</div>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="apiCall.js"></script>
 	<script type="text/javascript">
-		function actionAPI(){
-			let idRestaurant = document.querySelector('[name="id_restaurant"]').value; // baca dari field id restaurant
+		function editAPI(){
+			const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+			const BASE_URI = 'https://ojoakua.site/accounting/';
+			let id_ = document.querySelector('[name="id"]').value;
+			// let idRestaurant = document.querySelector('[name="id_restaurant"]').value;
 			let tanggal = document.querySelector('[name="tanggal"]').value; // baca dari field tanggal
 			let jumlah = document.querySelector('[name="jumlah"]').value; // baca dari field jumlah
 			let keterangan = document.querySelector('[name="keterangan"]').value; // baca dari field keterangan
+			let dataType = document.querySelector('[name=jenisdata]').value;
+			let method = document.querySelector('[name=method]').value;
 
 			let data = {
 				"tanggal": tanggal,
-				"id_restaurant": idRestaurant,
+				"id_restaurant": 'R032',
 				"keterangan": keterangan,
 				"jumlah": jumlah
 			};
 
 			let jsonString = JSON.stringify(data);
+
+			let xhr = createCORSRequest(method, proxyUrl + BASE_URI + dataType + '/' + id_);
+			xhr.onload = function () {
+				// do something with result here
+				let result = JSON.parse(xhr.response)
+			};
+
+			xhr.onerror = function () {
+				// error callback here
+				alert("Error");
+				console.log(xhr.response);
+			};
+
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(jsonString);
 		}
 	</script>
 </body>

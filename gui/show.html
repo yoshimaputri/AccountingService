@@ -72,7 +72,7 @@
 			</div>
 		</div>
 	</nav>
-	<form style="width: 100%; background-color: #f4f6f7; padding: 10px;" action="" onsubmit="actionAPI();">
+	<div style="width: 100%; background-color: #f4f6f7; padding: 10px;">
 		<div class="row" style="text-align: center; width: 100%; margin:50px;">
 			<div class="col-sm-5" style="margin: 10px;">
 				<h3 style="text-align: left;">Method:</h3>
@@ -89,8 +89,8 @@
 				<h3 style="text-align: left;">Data:</h3>
 				<div class="form-group">
 					<select class="form-control" name="jenisdata">
-						<option value="Pendapatan">Pendapatan</option>
-						<option value="Pengeluaran">Pengeluaran</option>
+						<option value="pendapatan">Pendapatan</option>
+						<option value="pengeluaran">Pengeluaran</option>
 					</select>
 				</div>
 			</div>
@@ -106,7 +106,13 @@
 					</select>
 				</div>
 			</div>
-			<div id="for_idres" class="col-sm-5" style="margin: 10px; width: 100%; display: none;">
+		</div>
+		<div id="for_idres" class="row" style="text-align: center; width: 100%; margin:50px;display: none;">
+			<div class="col-sm-5" style="margin: 10px; width: 100%;">
+				<h3 style="text-align: left;">ID Restauran:</h3>
+				<input class="form-control" type="text" name="id_restaurant">
+			</div>
+			<div class="col-sm-5" style="margin: 10px; width: 100%;">
 				<h3 style="text-align: left;">Limit Data:</h3>
 				<input class="form-control" type="text" name="limit">
 			</div>
@@ -121,9 +127,11 @@
 				<input class="form-control" type="text" name="bulan">
 			</div>
 		</div>
-		<button style="width: 25%; margin-left: 35%; text-align: center;" type="submit" class="btn btn-primary">Request Data</button>
-	</form>
+		<button style="width: 25%; margin-left: 35%; text-align: center;" onclick="reqAPI()" class="btn btn-primary">Request Data</button>
+	</div>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="apiCall.js"></script>
 	<script type="text/javascript">
 		function showHide(){
 			console.log(document.querySelector('[name="based"]').value)
@@ -136,20 +144,63 @@
 				document.getElementById('for_idres').style.display = "none";
 			}
 		}
-		function actionAPI(){
-			let idRestaurant = document.querySelector('[name="id_restaurant"]').value; // baca dari field id restaurant
-			let tanggal = document.querySelector('[name="tanggal"]').value; // baca dari field tanggal
-			let jumlah = document.querySelector('[name="jumlah"]').value; // baca dari field jumlah
-			let keterangan = document.querySelector('[name="keterangan"]').value; // baca dari field keterangan
+		function reqAPI(){
+			const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+			const BASE_URI = 'https://ojoakua.site/accounting/';
+			// let id_ = document.querySelector('[name="id"]').value;
+			let idRestaurant = document.querySelector('[name="id_restaurant"]').value;
+			let limit = document.querySelector('[name="limit"]').value; 
+			let tahun = document.querySelector('[name="tahun"]').value;
+			let bulan = document.querySelector('[name="bulan"]').value; 
 
-			let data = {
-				"tanggal": tanggal,
-				"id_restaurant": idRestaurant,
-				"keterangan": keterangan,
-				"jumlah": jumlah
-			};
+			let dataType = document.querySelector('[name=jenisdata]').value;
+			let method = document.querySelector('[name=method]').value;
 
-			let jsonString = JSON.stringify(data);
+			if (document.querySelector('[name="based"]').value == 'idres'){
+				document.getElementById('for_idres').style.display = "block";
+				document.getElementById('for_thn').style.display = "none";
+				fetch(proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit)
+				.then(response => response.text())
+				.then(contents => console.log(contents))
+				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
+			}
+			else if (document.querySelector('[name="based"]').value == 'thn'){
+				document.getElementById('for_thn').style.display = "block";
+				document.getElementById('for_idres').style.display = "none";
+				fetch(proxyUrl + BASE_URI + dataType + '/' + tahun + '/' + bulan)
+				.then(response => response.text())
+				.then(contents => console.log(contents))
+				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
+			}
+			else if (document.querySelector('[name="based"]').value == 'nothing'){
+				fetch(proxyUrl + BASE_URI + dataType)
+				.then(response => response.text())
+				.then(contents => console.log(contents))
+				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
+			}
+			
+			// buat filter brdasarkan idrestoran
+			// let xhr = createCORSRequest(method, proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit);
+			// xhr.onload = function () {
+			// 	// do something with result here
+			// 	let result = JSON.parse(xhr.response)
+			// };
+
+			// // buat filter brdasarkan tahun, bulan
+			// let xhr2 = createCORSRequest(method, proxyUrl + BASE_URI + dataType + '/' + tahun + '/' + bulan);
+			// xhr.onload = function () {
+			// 	// do something with result here
+			// 	let result = JSON.parse(xhr2.response)
+			// };
+
+			// xhr.onerror = function () {
+			// 	// error callback here
+			// 	alert("Error");
+			// 	console.log(xhr.response);
+			// };
+
+			// xhr.setRequestHeader("Content-Type", "application/json");
+			// xhr.send(jsonString);
 		}
 	</script>
 </body>

@@ -72,6 +72,21 @@
 			</div>
 		</div>
 	</nav>
+	<div class="row" style="text-align: center; display: none;">
+		<div id="modalSuccess" class="modal fade" role="dialog" style="z-index: 9999;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Success !</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body" style="text-align: left;">
+						<p>Data berhasil ditambahkan.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div style="width: 100%; background-color: #f4f6f7; padding: 10px;">
 		<div class="row" style="text-align: center; width: 100%; margin:50px;">
 			<div class="col-sm-5" style="margin: 10px;">
@@ -116,19 +131,22 @@
 			</div>
 		</div>
 		<button style="width: 25%; margin-left: 35%; text-align: center;" onclick="actionAPI()" class="btn btn-primary">Kirim</button>
+
 	</div>
+	
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="apiCall.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="apiCall.js"></script>
 	<script type="text/javascript">
 		function actionAPI(){
-		    const BASE_URI = 'https://ojoakua.site/accounting/';
+			const BASE_URI = 'https://ojoakua.site/accounting/';
 
 			let idRestaurant = document.querySelector('[name="id_restaurant"]').value; // baca dari field id restaurant
 			let tanggal = document.querySelector('[name="tanggal"]').value; // baca dari field tanggal
 			let jumlah = document.querySelector('[name="jumlah"]').value; // baca dari field jumlah
 			let keterangan = document.querySelector('[name="keterangan"]').value; // baca dari field keterangan
-            let dataType = document.querySelector('[name=jenisdata]').value;
-            let method = document.querySelector('[name=method]').value;
+			let dataType = document.querySelector('[name=jenisdata]').value;
+			let method = document.querySelector('[name=method]').value;
 
 			let data = {
 				"tanggal": tanggal,
@@ -141,18 +159,22 @@
 
 			let xhr = createCORSRequest(method, BASE_URI + dataType);
 			xhr.onload = function () {
-			    // do something with result here
-                let result = JSON.parse(xhr.response)
-            };
+				// do something with result here
+				let result = JSON.parse(xhr.response)
+			};
 
-            xhr.onerror = function () {
-                // error callback here
-                alert("Error");
-                console.log(xhr.response);
-            };
+			xhr.onerror = function () {
+				// error callback here
+				alert("Error");
+				console.log(xhr.response);
+			};
 
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(jsonString);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(jsonString);
+
+			$("#modalSuccess").modal({
+				fadeDuration: 100
+			});
 		}
 	</script>
 </body>
