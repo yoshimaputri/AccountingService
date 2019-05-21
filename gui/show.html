@@ -127,6 +127,8 @@
 				<input class="form-control" type="text" name="bulan">
 			</div>
 		</div>
+		<h3 style="margin-left: 70px;">Hasil GET:</h3>
+		<div id="hasilGET" style="margin: 0px 70px 50px 70px;"></div>
 		<button style="width: 25%; margin-left: 35%; text-align: center;" onclick="reqAPI()" class="btn btn-primary">Request Data</button>
 	</div>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -159,48 +161,38 @@
 			if (document.querySelector('[name="based"]').value == 'idres'){
 				document.getElementById('for_idres').style.display = "block";
 				document.getElementById('for_thn').style.display = "none";
-				fetch(proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit)
+				fetch(proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit, {
+					method: 'GET', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, *same-origin, omit
+					headers: {
+						'Content-Type': 'application/json',
+						// 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // no-referrer, *client
+					body: JSON.stringify(), // body data type must match "Content-Type" header
+				})
 				.then(response => response.text())
-				.then(contents => console.log(contents))
+				.then(contents => $('#hasilGET').text(JSON.stringify(contents, null, 4)))
 				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
+				
 			}
 			else if (document.querySelector('[name="based"]').value == 'thn'){
 				document.getElementById('for_thn').style.display = "block";
 				document.getElementById('for_idres').style.display = "none";
 				fetch(proxyUrl + BASE_URI + dataType + '/' + tahun + '/' + bulan)
 				.then(response => response.text())
-				.then(contents => console.log(contents))
+				.then(contents => $('#hasilGET').text(JSON.stringify(contents, null, 4)))
 				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
 			}
 			else if (document.querySelector('[name="based"]').value == 'nothing'){
 				fetch(proxyUrl + BASE_URI + dataType)
 				.then(response => response.text())
-				.then(contents => console.log(contents))
+				.then(contents => $('#hasilGET').text(JSON.stringify(contents, null, 4)))
 				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
 			}
-			
-			// buat filter brdasarkan idrestoran
-			// let xhr = createCORSRequest(method, proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit);
-			// xhr.onload = function () {
-			// 	// do something with result here
-			// 	let result = JSON.parse(xhr.response)
-			// };
-
-			// // buat filter brdasarkan tahun, bulan
-			// let xhr2 = createCORSRequest(method, proxyUrl + BASE_URI + dataType + '/' + tahun + '/' + bulan);
-			// xhr.onload = function () {
-			// 	// do something with result here
-			// 	let result = JSON.parse(xhr2.response)
-			// };
-
-			// xhr.onerror = function () {
-			// 	// error callback here
-			// 	alert("Error");
-			// 	console.log(xhr.response);
-			// };
-
-			// xhr.setRequestHeader("Content-Type", "application/json");
-			// xhr.send(jsonString);
 		}
 	</script>
 </body>
