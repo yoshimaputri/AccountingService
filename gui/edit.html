@@ -3,6 +3,7 @@
 <head>
 	<title>Accounting Service</title>
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 	<style>
 		nav ul {
 			list-style-type: none;
@@ -144,8 +145,9 @@
 			let xhr = createCORSRequest(method, proxyUrl + BASE_URI + dataType + '/' + id_);
 			xhr.onload = function () {
 				// do something with result here
-				let result = JSON.parse(xhr.response)
-			};
+				let result = JSON.parse(xhr.response);
+                alert("Success");
+            };
 
 			xhr.onerror = function () {
 				// error callback here

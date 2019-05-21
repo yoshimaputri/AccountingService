@@ -3,6 +3,7 @@
 <head>
 	<title>Accounting Service</title>
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 	<style>
 		nav ul {
 			list-style-type: none;
@@ -134,8 +135,8 @@
 
 	</div>
 	
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="apiCall.js"></script>
 	<script type="text/javascript">
 		function actionAPI(){
@@ -160,7 +161,12 @@
 			let xhr = createCORSRequest(method, BASE_URI + dataType);
 			xhr.onload = function () {
 				// do something with result here
-				let result = JSON.parse(xhr.response)
+				let result = JSON.parse(xhr.response);
+				console.log(result);
+				alert("Success");
+				// $("#modalSuccess").modal({
+				// 	fadeDuration: 100
+				// });
 			};
 
 			xhr.onerror = function () {
@@ -171,10 +177,6 @@
 
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(jsonString);
-
-			$("#modalSuccess").modal({
-				fadeDuration: 100
-			});
 		}
 	</script>
 </body>

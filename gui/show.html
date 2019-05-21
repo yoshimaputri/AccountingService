@@ -3,6 +3,7 @@
 <head>
 	<title>Accounting Service</title>
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 	<style>
 		nav ul {
 			list-style-type: none;
@@ -127,9 +128,9 @@
 				<input class="form-control" type="text" name="bulan">
 			</div>
 		</div>
-		<h3 style="margin-left: 70px;">Hasil GET:</h3>
-		<div id="hasilGET" style="margin: 0px 70px 50px 70px;"></div>
 		<button style="width: 25%; margin-left: 35%; text-align: center;" onclick="reqAPI()" class="btn btn-primary">Request Data</button>
+		<h3 style="margin-left: 70px;">Hasil GET:</h3>
+		<div id="hasilGET" class="table-responsive" style="margin: 0px 70px 50px 70px;"></div>
 	</div>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -137,11 +138,11 @@
 	<script type="text/javascript">
 		function showHide(){
 			console.log(document.querySelector('[name="based"]').value)
-			if (document.querySelector('[name="based"]').value == 'idres'){
+			if (document.querySelector('[name="based"]').value === 'idres'){
 				document.getElementById('for_idres').style.display = "block";
 				document.getElementById('for_thn').style.display = "none";
 			}
-			else if (document.querySelector('[name="based"]').value == 'thn'){
+			else if (document.querySelector('[name="based"]').value === 'thn'){
 				document.getElementById('for_thn').style.display = "block";
 				document.getElementById('for_idres').style.display = "none";
 			}
@@ -156,42 +157,73 @@
 			let bulan = document.querySelector('[name="bulan"]').value; 
 
 			let dataType = document.querySelector('[name=jenisdata]').value;
-			let method = document.querySelector('[name=method]').value;
+			// let method = document.querySelector('[name=method]').value;
 
-			if (document.querySelector('[name="based"]').value == 'idres'){
+			if (document.querySelector('[name="based"]').value === 'idres'){
 				document.getElementById('for_idres').style.display = "block";
 				document.getElementById('for_thn').style.display = "none";
-				fetch(proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit, {
-					method: 'GET', // *GET, POST, PUT, DELETE, etc.
-					mode: 'cors', // no-cors, cors, *same-origin
-					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-					credentials: 'same-origin', // include, *same-origin, omit
-					headers: {
-						'Content-Type': 'application/json',
-						// 'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					redirect: 'follow', // manual, *follow, error
-					referrer: 'no-referrer', // no-referrer, *client
-					body: JSON.stringify(), // body data type must match "Content-Type" header
-				})
-				.then(response => response.text())
-				.then(contents => $('#hasilGET').text(JSON.stringify(contents, null, 4)))
+				fetch(proxyUrl + BASE_URI + dataType + '?idrest=' + idRestaurant + '&limit=' + limit)
+                    .then(response => response.json())
+                    .then(contents => {
+                        let elem = "<table class='table table-striped'>";
+                        elem += "<thead><td>id</td><td>id rest</td><td>tanggal</td><td>keterangan</td><td>jumlah</td></thead><tbody>";
+                        for (let i = 0; i < contents.length; i++) {
+                            elem += "<tr>";
+                            elem += "<td>" + contents[i]['id_' + dataType] + "</td>";
+                            elem += "<td>" + contents[i].id_restaurant + "</td>";
+                            elem += "<td>" + contents[i].tanggal + "</td>";
+                            elem += "<td>" + contents[i].keterangan + "</td>";
+                            elem += "<td>" + contents[i].jumlah + "</td>";
+                            elem += "<tr>";
+                        }
+                        elem += "</tbody></table>";
+                        $('#hasilGET').html(elem);
+                    })
+                    .catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
 				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
 				
 			}
-			else if (document.querySelector('[name="based"]').value == 'thn'){
+			else if (document.querySelector('[name="based"]').value === 'thn'){
 				document.getElementById('for_thn').style.display = "block";
 				document.getElementById('for_idres').style.display = "none";
 				fetch(proxyUrl + BASE_URI + dataType + '/' + tahun + '/' + bulan)
-				.then(response => response.text())
-				.then(contents => $('#hasilGET').text(JSON.stringify(contents, null, 4)))
-				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
+                    .then(response => response.json())
+                    .then(contents => {
+                        let elem = "<table class='table table-striped'>";
+                        elem += "<thead><td>id</td><td>id rest</td><td>tanggal</td><td>keterangan</td><td>jumlah</td></thead><tbody>";
+                        for (let i = 0; i < contents.length; i++) {
+                            elem += "<tr>";
+                            elem += "<td>" + contents[i]['id_' + dataType] + "</td>";
+                            elem += "<td>" + contents[i].id_restaurant + "</td>";
+                            elem += "<td>" + contents[i].tanggal + "</td>";
+                            elem += "<td>" + contents[i].keterangan + "</td>";
+                            elem += "<td>" + contents[i].jumlah + "</td>";
+                            elem += "<tr>";
+                        }
+                        elem += "</tbody></table>";
+                        $('#hasilGET').html(elem);
+                    })
+                    .catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
 			}
-			else if (document.querySelector('[name="based"]').value == 'nothing'){
+			else if (document.querySelector('[name="based"]').value === 'nothing'){
 				fetch(proxyUrl + BASE_URI + dataType)
-				.then(response => response.text())
-				.then(contents => $('#hasilGET').text(JSON.stringify(contents, null, 4)))
-				.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
+					.then(response => response.json())
+					.then(contents => {
+                        let elem = "<table class='table table-striped'>";
+						elem += "<thead><td>id</td><td>id rest</td><td>tanggal</td><td>keterangan</td><td>jumlah</td></thead><tbody>";
+						for (let i = 0; i < contents.length; i++) {
+							elem += "<tr>";
+							elem += "<td>" + contents[i]['id_' + dataType] + "</td>";
+							elem += "<td>" + contents[i].id_restaurant + "</td>";
+							elem += "<td>" + contents[i].tanggal + "</td>";
+							elem += "<td>" + contents[i].keterangan + "</td>";
+							elem += "<td>" + contents[i].jumlah + "</td>";
+							elem += "<tr>";
+						}
+						elem += "</tbody></table>";
+						$('#hasilGET').html(elem);
+					})
+					.catch(() => console.log("can't access " + BASE_URI + " response. Blocked by browser?"))
 			}
 		}
 	</script>
