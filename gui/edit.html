@@ -72,6 +72,21 @@
 			</div>
 		</div>
 	</nav>
+	<div class="row" style="text-align: center; display: none;">
+		<div id="modalSuccess" class="modal fade" role="dialog" style="z-index: 9999;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Success !</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body" style="text-align: left;">
+						<p>Data berhasil diubah.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div style="width: 100%; background-color: #f4f6f7; padding: 10px;">
 		<div class="row" style="text-align: center; width: 100%; margin:50px;">
 			<div class="col-sm-5" style="margin: 10px;">
@@ -100,6 +115,12 @@
 				<h3 style="text-align: left;">Edit berdasarkan ID data:</h3>
 				<input class="form-control" type="text" name="id">
 			</div>
+		</div>
+		<div class="row" style="text-align: center; width: 100%; margin:50px;">
+			<div class="col-sm-5" style="margin: 10px; width: 100%;">
+				<h3 style="text-align: left;">ID Restoran:</h3>
+				<input class="form-control" type="text" name="id_restaurant">
+			</div>
 			<div class="col-sm-5" style="margin: 10px; width: 100%;">
 				<h3 style="text-align: left;">Tanggal:</h3>
 				<input class="form-control" type="date" name="tanggal">
@@ -125,7 +146,7 @@
 			const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 			const BASE_URI = 'https://ojoakua.site/accounting/';
 			let id_ = document.querySelector('[name="id"]').value;
-			// let idRestaurant = document.querySelector('[name="id_restaurant"]').value;
+			let idRestaurant = document.querySelector('[name="id_restaurant"]').value;
 			let tanggal = document.querySelector('[name="tanggal"]').value; // baca dari field tanggal
 			let jumlah = document.querySelector('[name="jumlah"]').value; // baca dari field jumlah
 			let keterangan = document.querySelector('[name="keterangan"]').value; // baca dari field keterangan
@@ -134,7 +155,7 @@
 
 			let data = {
 				"tanggal": tanggal,
-				"id_restaurant": 'R032',
+				"id_restaurant": idRestaurant,
 				"keterangan": keterangan,
 				"jumlah": jumlah
 			};
